@@ -6,7 +6,7 @@
 /*   By: vpoka <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/30 15:04:53 by vpoka             #+#    #+#             */
-/*   Updated: 2025/02/17 20:34:54 by vpoka            ###   ########.fr       */
+/*   Updated: 2025/02/18 19:28:51 by vpoka            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,8 +33,7 @@ typedef struct s_pdata
 
 //----------pipex.c----------//
 
-void		sclose(int *fd, t_pdata *vars);
-void		clean_exit(int error, char *msg, t_pdata *vars, int exit_status);
+int			main(int argc, char **argv, char **envp);
 
 //----------check_cmd.c----------//
 
@@ -48,6 +47,8 @@ pid_t		execute_command(t_pdata *vars, char **envp, int last);
 
 void		prep_variables(t_pdata *vars);
 void		free_dbl_str(char **str);
+void		sclose(int *fd, t_pdata *vars);
+void		clean_exit(int error, char *msg, t_pdata *vars, int exit_status);
 void		wait_for_child(pid_t child, t_pdata *vars, int last);
 
 #endif
