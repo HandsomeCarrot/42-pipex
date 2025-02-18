@@ -24,17 +24,17 @@
  */
 int	ft_memcmp(const void *s1, const void *s2, size_t n)
 {
-	unsigned char	*uns_s1;
-	unsigned char	*uns_s2;
+	unsigned char	*u_s1;
+	unsigned char	*u_s2;
 
-	uns_s1 = (unsigned char *)s1;
-	uns_s2 = (unsigned char *)s2;
-	while (n > 0 && (uns_s1 || uns_s2))
+	u_s1 = (unsigned char *)s1;
+	u_s2 = (unsigned char *)s2;
+	while (n > 0 && (u_s1 || u_s2))
 	{
-		if (*uns_s1 != *uns_s2)
-			return (*uns_s1 - *uns_s2);
-		uns_s1++;
-		uns_s2++;
+		if (*u_s1 != *u_s2)
+			return (*u_s1 - *u_s2);
+		u_s1++;
+		u_s2++;
 		n--;
 	}
 	return (0);

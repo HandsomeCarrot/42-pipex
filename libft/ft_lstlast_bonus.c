@@ -23,15 +23,15 @@
  */
 t_list	*ft_lstlast(t_list *lst)
 {
-	int	list_size;
+	int	size;
 
 	if (!lst)
 		return (NULL);
-	list_size = ft_lstsize(lst);
-	while (list_size > 1)
+	size = ft_lstsize(lst);
+	while (size > 1)
 	{
 		lst = lst->next;
-		list_size--;
+		size--;
 	}
 	return (lst);
 }

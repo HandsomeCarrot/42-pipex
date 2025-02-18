@@ -22,30 +22,28 @@
  */
 char	*ft_strjoin(char const *s1, char const *s2)
 {
-	char	*result;
-	size_t	result_len;
+	char	*res;
+	size_t	s1_len;
+	size_t	new_len;
 	size_t	pos;
 
-	result_len = ft_strlen(s1) + ft_strlen(s2);
-	if (result_len == 0)
+	s1_len = ft_strlen(s1);
+	new_len = s1_len + ft_strlen(s2);
+	if (new_len == 0)
 		return (ft_strdup(""));
-	result = malloc((result_len + 1) * sizeof(char));
-	if (!result)
+	res = malloc(new_len + 1);
+	if (!res)
 		return (NULL);
 	pos = 0;
 	while (s1[pos])
 	{
-		result[pos] = s1[pos];
+		res[pos] = s1[pos];
 		pos++;
 	}
 	while (*s2)
-	{
-		result[pos] = *s2;
-		s2++;
-		pos++;
-	}
-	result[pos] = '\0';
-	return (result);
+		res[pos++] = *s2++;
+	res[pos] = '\0';
+	return (res);
 }
 
 /*#include <stdio.h>

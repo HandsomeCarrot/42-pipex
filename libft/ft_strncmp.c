@@ -31,16 +31,16 @@
 int	ft_strncmp(const char *s1, const char *s2, size_t n)
 {
 	size_t			pos;
-	unsigned char	*uns_s1;
-	unsigned char	*uns_s2;
+	unsigned char	*u_s1;
+	unsigned char	*u_s2;
 
 	pos = 0;
-	uns_s1 = (unsigned char *)s1;
-	uns_s2 = (unsigned char *)s2;
-	while (pos < n && (uns_s1[pos] || uns_s2[pos]))
+	u_s1 = (unsigned char *)s1;
+	u_s2 = (unsigned char *)s2;
+	while (pos < n && (*(u_s1 + pos) || *(u_s2 + pos)))
 	{
-		if (uns_s1[pos] != uns_s2[pos])
-			return (uns_s1[pos] - uns_s2[pos]);
+		if (*(u_s1 + pos) != *(u_s2 + pos))
+			return (*(u_s1 + pos) - *(u_s2 + pos));
 		pos++;
 	}
 	return (0);

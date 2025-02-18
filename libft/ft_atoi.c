@@ -22,11 +22,11 @@
  */
 int	ft_atoi(const char *nptr)
 {
-	int		result;
+	long	res;
 	int		sign;
 
 	sign = 1;
-	result = 0;
+	res = 0;
 	while (*nptr == ' ' || *nptr == '\t' || *nptr == '\n' || *nptr == '\v'
 		|| *nptr == '\f' || *nptr == '\r')
 		nptr++;
@@ -36,10 +36,17 @@ int	ft_atoi(const char *nptr)
 		nptr++;
 	while (ft_isdigit(*nptr))
 	{
-		result = result * 10 + (*nptr - '0');
+		res = res * 10 + (*nptr - '0');
+		if (res > INT_MAX)
+		{
+			if (sign == 1)
+				return (INT_MAX);
+			else
+				return (INT_MIN);
+		}
 		nptr++;
 	}
-	return (sign * result);
+	return (sign * res);
 }
 
 /* #include <stdio.h>

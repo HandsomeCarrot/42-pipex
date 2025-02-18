@@ -24,20 +24,20 @@
 size_t	ft_strlcpy(char *dst, const char *src, size_t size)
 {
 	size_t	pos;
-	size_t	src_len;
+	size_t	len;
 
-	src_len = ft_strlen(src);
+	len = ft_strlen(src);
 	if (size == 0)
-		return (src_len);
+		return (len);
 	pos = 0;
-	while (pos < size - 1 && src[pos])
+	while (pos < size - 1 && *(src + pos))
 	{
-		dst[pos] = src[pos];
+		*(dst + pos) = *(src + pos);
 		pos++;
 	}
 	if (size > 0)
-		dst[pos] = '\0';
-	return (src_len);
+		*(dst + pos) = '\0';
+	return (len);
 }
 /* #include <stdio.h>
 int	main(void)

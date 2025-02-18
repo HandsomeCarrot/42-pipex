@@ -21,13 +21,11 @@
 void	ft_bzero(void *s, size_t n)
 {
 	size_t	pos;
-	char	*str;
 
-	str = (char *)s;
 	pos = 0;
 	while (pos < n)
 	{
-		str[pos] = 0;
+		*((char *)s + pos) = 0;
 		pos++;
 	}
 }

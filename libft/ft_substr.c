@@ -26,17 +26,17 @@ char	*ft_substr(char const *s, unsigned int start, size_t len)
 	char			*res;
 	size_t			pos;
 	unsigned int	s_len;
-	int				res_len;
+	int				r_len;
 
 	if (!s)
 		return (NULL);
 	s_len = ft_strlen(s);
 	if (start >= s_len)
 		return (ft_calloc(1, sizeof(char)));
-	res_len = len;
+	r_len = len;
 	if (len > s_len - start)
-		res_len = s_len - start;
-	res = malloc(res_len * sizeof(char) + 1);
+		r_len = s_len - start;
+	res = malloc(r_len * sizeof(char) + 1);
 	if (!res)
 		return (NULL);
 	pos = 0;

@@ -25,15 +25,15 @@
  */
 int	ft_lstsize(t_list *lst)
 {
-	int	list_size;
+	int	res;
 
-	list_size = 0;
+	res = 0;
 	while (lst)
 	{
-		list_size++;
+		res++;
 		lst = lst->next;
 	}
-	return (list_size);
+	return (res);
 }
 
 /*#include <stdio.h>
