@@ -17,21 +17,21 @@
  * @brief Adds a new element at the end of a linked list.
  *
  * This function takes a pointer to the first element of a linked list and a new
- * element to be added. It traverses the list to find the last_node element and
- *  adds * the new element at the end.
+ * element to be added. It traverses the list to find the last element and adds
+ * the new element at the end.
  *
  * @param lst A pointer to the first element of the list.
  * @param new The new element to be added to the list.
  */
 void	ft_lstadd_back(t_list **lst, t_list *new)
 {
-	t_list	*last_node;
+	t_list	*last;
 
-	last_node = ft_lstlast(*lst);
-	if (!last_node)
+	last = ft_lstlast(*lst);
+	if (!last)
 		*lst = new;
 	else
-		last_node->next = new;
+		last->next = new;
 }
 
 /*#include <stdio.h>

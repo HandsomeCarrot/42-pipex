@@ -69,6 +69,7 @@ static int	getlen(char const *s1, char const *set, int start)
  */
 char	*ft_strtrim(char const *s1, char const *set)
 {
+	char	*res;
 	int		res_len;
 	int		start;
 
@@ -82,7 +83,10 @@ char	*ft_strtrim(char const *s1, char const *set)
 	res_len = getlen(s1, set, start);
 	if (res_len <= 0)
 		return (ft_calloc(1, sizeof(char)));
-	return (ft_substr(s1, start, res_len));
+	res = ft_substr(s1, start, res_len);
+	if (!res)
+		return (NULL);
+	return (res);
 }
 
 /*#include <stdio.h>
