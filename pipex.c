@@ -6,48 +6,11 @@
 /*   By: vpoka <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/30 15:04:50 by vpoka             #+#    #+#             */
-/*   Updated: 2025/02/17 21:53:44 by vpoka            ###   ########.fr       */
+/*   Updated: 2025/02/18 19:31:23 by vpoka            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "pipex.h"
-
-void	sclose(int *fd, t_pdata *vars)
-{
-	if (fd && *fd && *fd != -1)
-	{
-		if (close(*fd) == -1)
-			clean_exit(1, "Close failed", vars, EXIT_FAILURE);
-		*fd = -1;
-	}
-}
-
-void	clean_exit(int error, char *msg, t_pdata *vars, int exit_status)
-{
-	if (error)
-		perror(msg);
-	else if (msg)
-		ft_putstr_fd(msg, STDERR_FILENO);
-	if (vars)
-	{
-		if (vars->cmd_array)
-			free_dbl_str(vars->cmd_array);
-		if (vars->cmd_path)
-		{
-			free(vars->cmd_path);
-			vars->cmd_path = NULL;
-		}
-		if (vars->input && vars->input != -1)
-			close(vars->input);
-		if (vars->output && vars->output != -1)
-			close(vars->output);
-		if (vars->pip[0] && vars->pip[0] != -1)
-			close(vars->pip[0]);
-		if (vars->pip[1] && vars->pip[1] != -1)
-			close(vars->pip[1]);
-	}
-	exit(exit_status);
-}
 
 int	main(int argc, char **argv, char **envp)
 {
