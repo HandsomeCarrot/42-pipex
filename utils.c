@@ -6,7 +6,7 @@
 /*   By: vpoka <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/07 22:09:03 by vpoka             #+#    #+#             */
-/*   Updated: 2025/02/18 19:27:51 by vpoka            ###   ########.fr       */
+/*   Updated: 2025/02/18 22:16:31 by vpoka            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,7 +55,7 @@ void	sclose(int *fd, t_pdata *vars)
 	}
 }
 
-void	clean_exit(int error, char *msg, t_pdata *vars, int exit_status)
+void	clean_exit(t_pdata *vars, int exit_status, int error)
 {
 	if (error)
 		perror(msg);
