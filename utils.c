@@ -6,7 +6,7 @@
 /*   By: vpoka <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/07 22:09:03 by vpoka             #+#    #+#             */
-/*   Updated: 2025/02/18 22:19:23 by vpoka            ###   ########.fr       */
+/*   Updated: 2025/02/19 11:02:32 by vpoka            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,8 @@ void	prep_variables(t_pdata *vars)
 	{
 		vars->cmd_array = NULL;
 		vars->cmd_path = NULL;
+		vars->error_file = NULL;
+		vars->error_msg = NULL;
 		vars->input = -1;
 		vars->output = -1;
 		vars->pip[0] = -1;
