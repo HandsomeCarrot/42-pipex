@@ -6,65 +6,65 @@
 /*   By: vpoka <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/30 15:04:50 by vpoka             #+#    #+#             */
-/*   Updated: 2025/02/19 18:22:48 by vpoka            ###   ########.fr       */
+/*   Updated: 2025/02/19 19:22:57 by vpoka            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "pipex.h"
 
-void	prep_variables(t_pdata *vars)
+void	initialize_data(t_pipex *data)
 {
-	vars->cmd_array = NULL;
-	vars->cmd_path = NULL;
-	vars->error_file = NULL;
-	vars->error_msg = NULL;
-	vars->input = -1;
-	vars->output = -1;
-	vars->pip[0] = -1;
-	vars->pip[1] = -1;
-	vars->child[0] = -1;
-	vars->child[1] = -1;
+	data->cmd_array = NULL;
+	data->cmd_path = NULL;
+	data->error_file = NULL;
+	data->error_msg = NULL;
+	data->input = -1;
+	data->output = -1;
+	data->pipe_fd[0] = -1;
+	data->pipe_fd[1] = -1;
+	data->child[0] = -1;
+	data->child[1] = -1;
 }
 
-void	open_files(t_pdata *vars, char *input, char *output)
+void	open_files(t_pipex *data, char *input, char *output)
 {
-	vars->input = open(input, O_RDONLY);
-	if (vars->input == -1)
+	data->input = open(input, O_RDONLY);
+	if (data->input == -1)
 	{
-		vars->error_msg = ft_strdup("Input file");
-		vars->error_file = ft_strdup(input);
-		print_error(vars, 1);
+		data->error_msg = ft_strdup("Input file");
+		data->error_file = ft_strdup(input);
+		print_error(data, 1);
 	}
-	vars->output = open(output, O_WRONLY | O_CREAT | O_TRUNC, 0644);
-	if (vars->output == -1)
+	data->output = open(output, O_WRONLY | O_CREAT | O_TRUNC, 0644);
+	if (data->output == -1)
 	{
-		vars->error_msg = ft_strdup("Output file");
-		vars->error_file = ft_strdup(output);
-		print_error(vars, 1);
+		data->error_msg = ft_strdup("Output file");
+		data->error_file = ft_strdup(output);
+		print_error(data, 1);
 	}
 }
 
 int	main(int argc, char **argv, char **envp)
 {
-	t_pdata	vars;
+	t_pipex	data;
 
-	prep_variables(&vars);
+	initialize_data(&data);
 	if (argc != 5)
 	{
-		vars.error_msg = ft_strdup("Exactly 4 arguments needed");
-		clean_exit(&vars, EXIT_FAILURE, 0);
+		data.error_msg = ft_strdup("Exactly 4 arguments needed");
+		exit_program(&data, EXIT_FAILURE, 0);
 	}
-	if (pipe(vars.pip) == -1)
+	if (pipe(data.pipe_fd) == -1)
 	{
-		vars.error_msg = ft_strdup("Pipe failed");
-		clean_exit(&vars, EXIT_FAILURE, 1);
+		data.error_msg = ft_strdup("Pipe failed");
+		exit_program(&data, EXIT_FAILURE, 1);
 	}
-	open_files(&vars, argv[1], argv[4]);
-	set_cmd_vars(&vars, argv[2], envp);
-	vars.child[0] = execute_command(&vars, envp, 0);
-	set_cmd_vars(&vars, argv[3], envp);
-	vars.child[1] = execute_command(&vars, envp, 1);
-	sclose(NULL, &vars);
-	wait_for_children(&vars);
-	clean_exit(&vars, EXIT_SUCCESS, 0);
+	open_files(&data, argv[1], argv[4]);
+	process_command(&data, argv[2], envp);
+	data.child[0] = execute_command(&data, envp, 0);
+	process_command(&data, argv[3], envp);
+	data.child[1] = execute_command(&data, envp, 1);
+	protected_close(NULL, &data);
+	wait_for_child_processes(&data);
+	exit_program(&data, EXIT_SUCCESS, 0);
 }

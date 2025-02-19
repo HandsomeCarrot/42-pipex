@@ -1,18 +1,18 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   utils.c                                            :+:      :+:    :+:   */
+/*   cleanup.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: vpoka <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/07 22:09:03 by vpoka             #+#    #+#             */
-/*   Updated: 2025/02/19 18:22:52 by vpoka            ###   ########.fr       */
+/*   Updated: 2025/02/19 19:22:57 by vpoka            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "pipex.h"
 
-void	free_dbl_str(char **str)
+void	free_string_array(char **str)
 {
 	int	pos;
 
@@ -27,41 +27,41 @@ void	free_dbl_str(char **str)
 		free(str);
 }
 
-void	sclose(int *fd, t_pdata *vars)
+void	protected_close(int *file_descriptor, t_pipex *data)
 {
-	if (fd && *fd != -1)
+	if (file_descriptor && *file_descriptor != -1)
 	{
-		if (close(*fd) == -1)
+		if (close(*file_descriptor) == -1)
 		{
-			vars->error_msg = ft_strdup("Close failed for fd");
-			vars->error_file = ft_itoa(*fd);
-			clean_exit(vars, EXIT_FAILURE, 1);
+			data->error_msg = ft_strdup("Close failed for file_descriptor");
+			data->error_file = ft_itoa(*file_descriptor);
+			exit_program(data, EXIT_FAILURE, 1);
 		}
-		*fd = -1;
+		*file_descriptor = -1;
 	}
-	else if (!fd)
+	else if (!file_descriptor)
 	{
-		sclose(&(vars->pip[0]), vars);
-		sclose(&(vars->pip[1]), vars);
-		sclose(&(vars->input), vars);
-		sclose(&(vars->output), vars);
+		protected_close(&(data->pipe_fd[0]), data);
+		protected_close(&(data->pipe_fd[1]), data);
+		protected_close(&(data->input), data);
+		protected_close(&(data->output), data);
 	}
 }
 
-void	wait_for_children(t_pdata *vars)
+void	wait_for_child_processes(t_pipex *data)
 {
 	int	status;
 
-	if (vars->child[0] != -1 && waitpid(vars->child[0], NULL, 0) == -1)
+	if (data->child[0] != -1 && waitpid(data->child[0], NULL, 0) == -1)
 	{
-		vars->error_msg = ft_strdup("Waitpid failed for 1st command");
-		clean_exit(vars, EXIT_FAILURE, 1);
+		data->error_msg = ft_strdup("Waitpid failed for 1st command");
+		exit_program(data, EXIT_FAILURE, 1);
 	}
-	if (waitpid(vars->child[1], &status, 0) == -1)
+	if (waitpid(data->child[1], &status, 0) == -1)
 	{
-		vars->error_msg = ft_strdup("Waitpid failed for 2nd command");
-		clean_exit(vars, EXIT_FAILURE, 1);
+		data->error_msg = ft_strdup("Waitpid failed for 2nd command");
+		exit_program(data, EXIT_FAILURE, 1);
 	}
 	if (WIFEXITED(status))
-		clean_exit(vars, WEXITSTATUS(status), 0);
+		exit_program(data, WEXITSTATUS(status), 0);
 }
