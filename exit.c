@@ -6,54 +6,51 @@
 /*   By: vpoka <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/18 22:18:29 by vpoka             #+#    #+#             */
-/*   Updated: 2025/02/19 13:32:50 by vpoka            ###   ########.fr       */
+/*   Updated: 2025/02/19 19:23:01 by vpoka            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "pipex.h"
 
-void	print_error(t_pdata *vars, int error)
+void	print_error(t_pipex *data, int include_errno)
 {
-	if (vars->error_msg)
+	if (data->error_msg)
 	{
-		ft_putstr_fd(vars->error_msg, STDERR_FILENO);
-		if (vars->error_file || error)
+		ft_putstr_fd(data->error_msg, STDERR_FILENO);
+		if (data->error_file || include_errno)
 			ft_putstr_fd(": ", STDERR_FILENO);
-		free(vars->error_msg);
-		vars->error_msg = NULL;
+		free(data->error_msg);
+		data->error_msg = NULL;
 	}
-	if (vars->error_file)
+	if (data->error_file)
 	{
-		ft_putstr_fd(vars->error_file, STDERR_FILENO);
-		if (error)
+		ft_putstr_fd(data->error_file, STDERR_FILENO);
+		if (include_errno)
 			ft_putstr_fd(": ", STDERR_FILENO);
-		free(vars->error_file);
-		vars->error_file = NULL;
+		free(data->error_file);
+		data->error_file = NULL;
 	}
-	if (error)
+	if (include_errno)
 		ft_putendl_fd(strerror(errno), STDERR_FILENO);
 }
 
-void	clean_exit(t_pdata *vars, int exit_status, int error)
+void	exit_program(t_pipex *data, int exit_code, int include_errno)
 {
-	print_error(vars, error);
-	if (vars)
+	print_error(data, include_errno);
+	if (data->cmd_array)
+		free_string_array(data->cmd_array);
+	if (data->cmd_path)
 	{
-		if (vars->cmd_array)
-			free_dbl_str(vars->cmd_array);
-		if (vars->cmd_path)
-		{
-			free(vars->cmd_path);
-			vars->cmd_path = NULL;
-		}
-		if (vars->input && vars->input != -1)
-			close(vars->input);
-		if (vars->output && vars->output != -1)
-			close(vars->output);
-		if (vars->pip[0] && vars->pip[0] != -1)
-			close(vars->pip[0]);
-		if (vars->pip[1] && vars->pip[1] != -1)
-			close(vars->pip[1]);
+		free(data->cmd_path);
+		data->cmd_path = NULL;
 	}
-	exit(exit_status);
+	if (data->input != -1)
+		close(data->input);
+	if (data->output != -1)
+		close(data->output);
+	if (data->pipe_fd[0] != -1)
+		close(data->pipe_fd[0]);
+	if (data->pipe_fd[1] != -1)
+		close(data->pipe_fd[1]);
+	exit(exit_code);
 }

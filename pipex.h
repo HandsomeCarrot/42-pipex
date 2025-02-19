@@ -6,7 +6,7 @@
 /*   By: vpoka <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/30 15:04:53 by vpoka             #+#    #+#             */
-/*   Updated: 2025/02/19 13:21:51 by vpoka            ###   ########.fr       */
+/*   Updated: 2025/02/19 19:22:57 by vpoka            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@
 
 //----------struct----------//
 
-typedef struct s_pdata
+typedef struct s_pipex
 {
 	char	**cmd_array;
 	char	*cmd_path;
@@ -29,32 +29,34 @@ typedef struct s_pdata
 	char	*error_msg;
 	int		input;
 	int		output;
-	int		pip[2];
+	int		pipe_fd[2];
 	pid_t	child[2];
-}			t_pdata;
+}			t_pipex;
 
 //----------pipex.c----------//
 
+void		initialize_data(t_pipex *data);
+void		open_files(t_pipex *data, char *input, char *output);
+
 int			main(int argc, char **argv, char **envp);
 
-//----------check_cmd.c----------//
+//----------command_validation.c----------//
 
-void		set_cmd_vars(t_pdata *vars, char *cmd, char **envp);
+void		process_command(t_pipex *data, char *cmd, char **envp);
 
-//----------exec_cmds.c----------//
+//----------execute_commands.c----------//
 
-pid_t		execute_command(t_pdata *vars, char **envp, int last);
+pid_t		execute_command(t_pipex *data, char **envp, int last);
 
-//----------utils.c----------//
+//----------cleanup.c----------//
 
-void		prep_variables(t_pdata *vars);
-void		free_dbl_str(char **str);
-void		sclose(int *fd, t_pdata *vars);
-void		wait_for_child(pid_t child, t_pdata *vars, int last);
+void		free_string_array(char **str);
+void		protected_close(int *fd, t_pipex *data);
+void		wait_for_child_processes(t_pipex *data);
 
 //----------exit.c----------//
 
-void		print_error(t_pdata *vars, int error);
-void		clean_exit(t_pdata *vars, int exit_status, int error);
+void		print_error(t_pipex *data, int error);
+void		exit_program(t_pipex *data, int exit_status, int error);
 
 #endif

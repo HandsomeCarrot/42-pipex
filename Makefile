@@ -6,7 +6,7 @@
 #    By: vpoka <marvin@42.fr>                       +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/01/30 15:04:56 by vpoka             #+#    #+#              #
-#    Updated: 2025/02/19 13:20:42 by vpoka            ###   ########.fr        #
+#    Updated: 2025/02/19 19:10:15 by vpoka            ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -17,9 +17,9 @@ CFLAGS = -Wall -Wextra -Werror -g
 RM = rm -f
 
 SRCS =	pipex.c \
-		check_cmd.c \
-		exec_cmds.c \
-		utils.c \
+		command_validation.c \
+		execute_commands.c \
+		cleanup.c \
 		exit.c
 		
 OBJS := $(SRCS:%.c=%.o)
