@@ -6,7 +6,7 @@
 /*   By: vpoka <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/31 17:36:38 by vpoka             #+#    #+#             */
-/*   Updated: 2025/02/19 15:50:46 by vpoka            ###   ########.fr       */
+/*   Updated: 2025/02/19 17:17:49 by vpoka            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@ static char	**get_path_dirs(char **envp)
 	int	pos;
 
 	pos = 0;
-	while (envp && envp[pos])
+	while (envp[pos])
 	{
 		if (ft_strncmp(envp[pos], "PATH=", 5) == 0)
 			return (ft_split((envp[pos]) + 5, ':'));
@@ -28,22 +28,14 @@ static char	**get_path_dirs(char **envp)
 
 static char	*assign_new_path(char *dir, char *cmd)
 {
-	int		cmd_path_len;
+	char	*dir_slash;
 	char	*new_cmd;
 
-	if (!dir || !cmd)
+	dir_slash = ft_strjoin(dir, "/");
+	if (!dir_slash)
 		return (NULL);
-	cmd_path_len = ft_strlen(dir) + ft_strlen(cmd) + 2;
-	new_cmd = ft_calloc(cmd_path_len, sizeof(char));
-	if (!new_cmd)
-		return (NULL);
-	ft_strlcat(new_cmd, dir, cmd_path_len);
-	ft_strlcat(new_cmd, "/", cmd_path_len);
-	if (ft_strlcat(new_cmd, cmd, cmd_path_len) >= (size_t)cmd_path_len)
-	{
-		free(new_cmd);
-		return (NULL);
-	}
+	new_cmd = ft_strjoin(dir_slash, cmd);
+	free(dir_slash);
 	return (new_cmd);
 }
 
@@ -52,8 +44,6 @@ static char	*find_valid_cmd_path(char **paths, char **cmd_array)
 	int		path;
 	char	*new_cmd;
 
-	if (!paths || !cmd_array || !cmd_array[0])
-		return (NULL);
 	path = 0;
 	while (paths[path])
 	{
@@ -73,8 +63,6 @@ static char	*get_cmd_path(char **cmd_array, char **envp)
 	char	**path_dirs;
 	char	*result;
 
-	if (!cmd_array || !cmd_array[0] || !envp)
-		return (NULL);
 	if (ft_strchr(cmd_array[0], '/') && access(cmd_array[0], F_OK) == 0)
 		return (ft_strdup(cmd_array[0]));
 	path_dirs = get_path_dirs(envp);
