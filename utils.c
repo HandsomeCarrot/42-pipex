@@ -6,7 +6,7 @@
 /*   By: vpoka <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/07 22:09:03 by vpoka             #+#    #+#             */
-/*   Updated: 2025/02/19 16:21:57 by vpoka            ###   ########.fr       */
+/*   Updated: 2025/02/19 17:48:37 by vpoka            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,17 +31,14 @@ void	free_dbl_str(char **str)
 	int	pos;
 
 	pos = 0;
-	while (str && str[pos])
+	while (str[pos])
 	{
 		free(str[pos]);
 		str[pos] = NULL;
 		pos++;
 	}
 	if (str)
-	{
 		free(str);
-		str = NULL;
-	}
 }
 
 void	sclose(int *fd, t_pdata *vars)
