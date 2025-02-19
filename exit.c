@@ -6,7 +6,7 @@
 /*   By: vpoka <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/18 22:18:29 by vpoka             #+#    #+#             */
-/*   Updated: 2025/02/19 13:21:27 by vpoka            ###   ########.fr       */
+/*   Updated: 2025/02/19 13:32:50 by vpoka            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,7 @@ void	print_error(t_pdata *vars, int error)
 		vars->error_file = NULL;
 	}
 	if (error)
-		ft_putstr_fd(strerror(errno), STDERR_FILENO);
+		ft_putendl_fd(strerror(errno), STDERR_FILENO);
 }
 
 void	clean_exit(t_pdata *vars, int exit_status, int error)
