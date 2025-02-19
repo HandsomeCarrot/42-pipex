@@ -6,7 +6,7 @@
 /*   By: vpoka <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/30 15:04:53 by vpoka             #+#    #+#             */
-/*   Updated: 2025/02/18 22:16:16 by vpoka            ###   ########.fr       */
+/*   Updated: 2025/02/19 11:08:09 by vpoka            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,7 +50,9 @@ pid_t		execute_command(t_pdata *vars, char **envp, int last);
 void		prep_variables(t_pdata *vars);
 void		free_dbl_str(char **str);
 void		sclose(int *fd, t_pdata *vars);
-void		clean_exit(t_pdata *vars, int exit_status, int error);
 void		wait_for_child(pid_t child, t_pdata *vars, int last);
+
+char		*print_error(t_pdata *vars, int error);
+void		clean_exit(t_pdata *vars, int exit_status, int error);
 
 #endif

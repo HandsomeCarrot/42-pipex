@@ -6,13 +6,13 @@
 /*   By: vpoka <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/18 22:18:29 by vpoka             #+#    #+#             */
-/*   Updated: 2025/02/18 22:21:56 by vpoka            ###   ########.fr       */
+/*   Updated: 2025/02/19 11:08:14 by vpoka            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "pipex.h"
 
-static char *print_error(t_pdata *vars, int error)
+char	*print_error(t_pdata *vars, int error)
 {
 	
 }
