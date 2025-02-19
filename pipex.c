@@ -6,7 +6,7 @@
 /*   By: vpoka <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/30 15:04:50 by vpoka             #+#    #+#             */
-/*   Updated: 2025/02/19 13:57:50 by vpoka            ###   ########.fr       */
+/*   Updated: 2025/02/19 14:12:11 by vpoka            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,7 +49,6 @@ int	main(int argc, char **argv, char **envp)
 	sclose(&(vars.pip[1]), &vars);
 	sclose(&(vars.input), &vars);
 	sclose(&(vars.output), &vars);
-	wait_for_child(vars.child[0], &vars, 0);
-	wait_for_child(vars.child[1], &vars, 1);
+	wait_for_children(&vars);
 	clean_exit(&vars, EXIT_SUCCESS, 0);
 }

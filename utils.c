@@ -6,7 +6,7 @@
 /*   By: vpoka <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/07 22:09:03 by vpoka             #+#    #+#             */
-/*   Updated: 2025/02/19 12:15:06 by vpoka            ###   ########.fr       */
+/*   Updated: 2025/02/19 14:11:52 by vpoka            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,23 +61,27 @@ void	sclose(int *fd, t_pdata *vars)
 	}
 }
 
-void	wait_for_child(pid_t child, t_pdata *vars, int last)
+void	wait_for_children(t_pdata *vars)
 {
 	int	status;
 
-	if (child != -1)
+	if (vars->child[0] != -1 && waitpid(vars->child[0], NULL, 0) == -1)
 	{
-		if (waitpid(child, &status, 0) == -1)
+		vars->error_msg = ft_strdup("Waitpid failed for 1st command");
+		clean_exit(vars, EXIT_FAILURE, 1);
+	}
+	if (vars->child[1] == -1)
+		clean_exit(vars, EXIT_FAILURE, 0);
+	else
+	{
+		if (waitpid(vars->child[1], &status, 0) == -1)
 		{
 			vars->error_msg = ft_strdup("Waitpid failed for 2nd command");
 			clean_exit(vars, EXIT_FAILURE, 1);
 		}
-		if (last && WIFEXITED(status))
+		if (WIFEXITED(status))
 		{
-			if (WEXITSTATUS(status) != 0)
-				clean_exit(vars, WEXITSTATUS(status), 0);
+			clean_exit(vars, WEXITSTATUS(status), 0);
 		}
 	}
-	else if (last)
-		clean_exit(vars, EXIT_FAILURE, 0);
 }
