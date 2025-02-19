@@ -6,7 +6,7 @@
 /*   By: vpoka <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/07 22:09:03 by vpoka             #+#    #+#             */
-/*   Updated: 2025/02/19 14:27:55 by vpoka            ###   ########.fr       */
+/*   Updated: 2025/02/19 15:40:10 by vpoka            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,6 +58,13 @@ void	sclose(int *fd, t_pdata *vars)
 			clean_exit(vars, EXIT_FAILURE, 1);
 		}
 		*fd = -1;
+	}
+	else if (!fd)
+	{
+		sclose(&(vars->pip[0]), vars);
+		sclose(&(vars->pip[1]), vars);
+		sclose(&(vars->input), vars);
+		sclose(&(vars->output), vars);
 	}
 }
 

@@ -6,7 +6,7 @@
 /*   By: vpoka <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/30 15:04:50 by vpoka             #+#    #+#             */
-/*   Updated: 2025/02/19 14:27:23 by vpoka            ###   ########.fr       */
+/*   Updated: 2025/02/19 15:40:52 by vpoka            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,10 +32,7 @@ int	main(int argc, char **argv, char **envp)
 	vars.child[0] = execute_command(&vars, envp, 0);
 	set_cmd_vars(&vars, argv[3], envp);
 	vars.child[1] = execute_command(&vars, envp, 1);
-	sclose(&(vars.pip[0]), &vars);
-	sclose(&(vars.pip[1]), &vars);
-	sclose(&(vars.input), &vars);
-	sclose(&(vars.output), &vars);
+	sclose(NULL, &vars);
 	wait_for_children(&vars);
 	clean_exit(&vars, EXIT_SUCCESS, 0);
 }
