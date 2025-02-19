@@ -6,15 +6,32 @@
 /*   By: vpoka <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/18 22:18:29 by vpoka             #+#    #+#             */
-/*   Updated: 2025/02/19 11:08:14 by vpoka            ###   ########.fr       */
+/*   Updated: 2025/02/19 13:21:27 by vpoka            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "pipex.h"
 
-char	*print_error(t_pdata *vars, int error)
+void	print_error(t_pdata *vars, int error)
 {
-	
+	if (vars->error_msg)
+	{
+		ft_putstr_fd(vars->error_msg, STDERR_FILENO);
+		if (vars->error_file || error)
+			ft_putstr_fd(": ", STDERR_FILENO);
+		free(vars->error_msg);
+		vars->error_msg = NULL;
+	}
+	if (vars->error_file)
+	{
+		ft_putstr_fd(vars->error_file, STDERR_FILENO);
+		if (error)
+			ft_putstr_fd(": ", STDERR_FILENO);
+		free(vars->error_file);
+		vars->error_file = NULL;
+	}
+	if (error)
+		ft_putstr_fd(strerror(errno), STDERR_FILENO);
 }
 
 void	clean_exit(t_pdata *vars, int exit_status, int error)
