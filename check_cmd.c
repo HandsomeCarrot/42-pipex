@@ -6,7 +6,7 @@
 /*   By: vpoka <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/31 17:36:38 by vpoka             #+#    #+#             */
-/*   Updated: 2025/02/17 21:53:58 by vpoka            ###   ########.fr       */
+/*   Updated: 2025/02/19 11:24:34 by vpoka            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,12 +88,18 @@ static char	*get_cmd_path(char **cmd_array, char **envp)
 void	set_cmd_vars(t_pdata *vars, char *cmd, char **envp)
 {
 	if (!cmd || !envp)
-		clean_exit(0, "Did not get needed variables\n", vars, EXIT_FAILURE);
+	{
+		vars->error_msg = ft_strdup("Did not get needed variables");
+		clean_exit(vars, EXIT_FAILURE, 0);
+	}
 	if (vars->cmd_array)
 		free_dbl_str(vars->cmd_array);
 	vars->cmd_array = ft_split(cmd, ' ');
 	if (!vars->cmd_array || !vars->cmd_array[0])
-		clean_exit(0, "ft_split failed\n", vars, EXIT_FAILURE);
+	{
+		vars->error_msg = ft_strdup("ft_split failed");
+		clean_exit(vars, EXIT_FAILURE, 0);
+	}
 	if (vars->cmd_path)
 		free(vars->cmd_path);
 	vars->cmd_path = get_cmd_path(vars->cmd_array, envp);
