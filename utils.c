@@ -6,7 +6,7 @@
 /*   By: vpoka <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/07 22:09:03 by vpoka             #+#    #+#             */
-/*   Updated: 2025/02/19 11:02:32 by vpoka            ###   ########.fr       */
+/*   Updated: 2025/02/19 12:15:06 by vpoka            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,7 +52,11 @@ void	sclose(int *fd, t_pdata *vars)
 	if (fd && *fd && *fd != -1)
 	{
 		if (close(*fd) == -1)
-			clean_exit(1, "Close failed", vars, EXIT_FAILURE);
+		{
+			vars->error_msg = ft_strdup("Close failed for fd");
+			vars->error_file = ft_itoa(*fd);
+			clean_exit(vars, EXIT_FAILURE, 1);
+		}
 		*fd = -1;
 	}
 }
@@ -64,13 +68,16 @@ void	wait_for_child(pid_t child, t_pdata *vars, int last)
 	if (child != -1)
 	{
 		if (waitpid(child, &status, 0) == -1)
-			clean_exit(1, "waitpid failed", vars, EXIT_FAILURE);
+		{
+			vars->error_msg = ft_strdup("Waitpid failed for 2nd command");
+			clean_exit(vars, EXIT_FAILURE, 1);
+		}
 		if (last && WIFEXITED(status))
 		{
 			if (WEXITSTATUS(status) != 0)
-				clean_exit(0, NULL, vars, WEXITSTATUS(status));
+				clean_exit(vars, WEXITSTATUS(status), 0);
 		}
 	}
 	else if (last)
-		clean_exit(0, NULL, vars, EXIT_FAILURE);
+		clean_exit(vars, EXIT_FAILURE, 0);
 }
