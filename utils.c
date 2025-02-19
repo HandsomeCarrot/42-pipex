@@ -6,7 +6,7 @@
 /*   By: vpoka <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/07 22:09:03 by vpoka             #+#    #+#             */
-/*   Updated: 2025/02/19 14:11:52 by vpoka            ###   ########.fr       */
+/*   Updated: 2025/02/19 14:27:55 by vpoka            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,6 +58,24 @@ void	sclose(int *fd, t_pdata *vars)
 			clean_exit(vars, EXIT_FAILURE, 1);
 		}
 		*fd = -1;
+	}
+}
+
+void	open_files(t_pdata *vars, char *input, char *output)
+{
+	vars->input = open(input, O_RDONLY);
+	if (vars->input == -1)
+	{
+		vars->error_msg = ft_strdup("Input file");
+		vars->error_file = ft_strdup(input);
+		print_error(vars, 1);
+	}
+	vars->output = open(output, O_WRONLY | O_CREAT | O_TRUNC, 0644);
+	if (vars->output == -1)
+	{
+		vars->error_msg = ft_strdup("Output file");
+		vars->error_file = ft_strdup(output);
+		print_error(vars, 1);
 	}
 }
 

@@ -6,7 +6,7 @@
 /*   By: vpoka <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/30 15:04:50 by vpoka             #+#    #+#             */
-/*   Updated: 2025/02/19 14:12:11 by vpoka            ###   ########.fr       */
+/*   Updated: 2025/02/19 14:27:23 by vpoka            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,21 +28,8 @@ int	main(int argc, char **argv, char **envp)
 		vars.error_msg = ft_strdup("Pipe failed");
 		clean_exit(&vars, EXIT_FAILURE, 1);
 	}
-	vars.input = open(argv[1], O_RDONLY);
-	if (vars.input == -1)
-	{
-		vars.error_msg = ft_strdup("Input file");
-		vars.error_file = ft_strdup(argv[1]);
-		print_error(&vars, 1);
-	}
+	open_files(&vars, argv[1], argv[4]);
 	vars.child[0] = execute_command(&vars, envp, 0);
-	vars.output = open(argv[4], O_WRONLY | O_CREAT | O_TRUNC, 0644);
-	if (vars.output == -1)
-	{
-		vars.error_msg = ft_strdup("Output file");
-		vars.error_file = ft_strdup(argv[4]);
-		print_error(&vars, 1);
-	}
 	set_cmd_vars(&vars, argv[3], envp);
 	vars.child[1] = execute_command(&vars, envp, 1);
 	sclose(&(vars.pip[0]), &vars);
