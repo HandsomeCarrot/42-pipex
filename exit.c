@@ -6,7 +6,7 @@
 /*   By: vpoka <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/18 22:18:29 by vpoka             #+#    #+#             */
-/*   Updated: 2025/02/19 13:32:50 by vpoka            ###   ########.fr       */
+/*   Updated: 2025/02/19 15:53:36 by vpoka            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,13 +46,13 @@ void	clean_exit(t_pdata *vars, int exit_status, int error)
 			free(vars->cmd_path);
 			vars->cmd_path = NULL;
 		}
-		if (vars->input && vars->input != -1)
+		if (vars->input != -1)
 			close(vars->input);
-		if (vars->output && vars->output != -1)
+		if (vars->output != -1)
 			close(vars->output);
-		if (vars->pip[0] && vars->pip[0] != -1)
+		if (vars->pip[0] != -1)
 			close(vars->pip[0]);
-		if (vars->pip[1] && vars->pip[1] != -1)
+		if (vars->pip[1] != -1)
 			close(vars->pip[1]);
 	}
 	exit(exit_status);

@@ -6,7 +6,7 @@
 /*   By: vpoka <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/07 22:09:03 by vpoka             #+#    #+#             */
-/*   Updated: 2025/02/19 15:40:10 by vpoka            ###   ########.fr       */
+/*   Updated: 2025/02/19 16:21:57 by vpoka            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,19 +14,16 @@
 
 void	prep_variables(t_pdata *vars)
 {
-	if (vars)
-	{
-		vars->cmd_array = NULL;
-		vars->cmd_path = NULL;
-		vars->error_file = NULL;
-		vars->error_msg = NULL;
-		vars->input = -1;
-		vars->output = -1;
-		vars->pip[0] = -1;
-		vars->pip[1] = -1;
-		vars->child[0] = -1;
-		vars->child[1] = -1;
-	}
+	vars->cmd_array = NULL;
+	vars->cmd_path = NULL;
+	vars->error_file = NULL;
+	vars->error_msg = NULL;
+	vars->input = -1;
+	vars->output = -1;
+	vars->pip[0] = -1;
+	vars->pip[1] = -1;
+	vars->child[0] = -1;
+	vars->child[1] = -1;
 }
 
 void	free_dbl_str(char **str)
@@ -49,7 +46,7 @@ void	free_dbl_str(char **str)
 
 void	sclose(int *fd, t_pdata *vars)
 {
-	if (fd && *fd && *fd != -1)
+	if (fd && *fd != -1)
 	{
 		if (close(*fd) == -1)
 		{
@@ -95,18 +92,11 @@ void	wait_for_children(t_pdata *vars)
 		vars->error_msg = ft_strdup("Waitpid failed for 1st command");
 		clean_exit(vars, EXIT_FAILURE, 1);
 	}
-	if (vars->child[1] == -1)
-		clean_exit(vars, EXIT_FAILURE, 0);
-	else
+	if (waitpid(vars->child[1], &status, 0) == -1)
 	{
-		if (waitpid(vars->child[1], &status, 0) == -1)
-		{
-			vars->error_msg = ft_strdup("Waitpid failed for 2nd command");
-			clean_exit(vars, EXIT_FAILURE, 1);
-		}
-		if (WIFEXITED(status))
-		{
-			clean_exit(vars, WEXITSTATUS(status), 0);
-		}
+		vars->error_msg = ft_strdup("Waitpid failed for 2nd command");
+		clean_exit(vars, EXIT_FAILURE, 1);
 	}
+	if (WIFEXITED(status))
+		clean_exit(vars, WEXITSTATUS(status), 0);
 }

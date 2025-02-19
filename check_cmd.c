@@ -6,7 +6,7 @@
 /*   By: vpoka <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/31 17:36:38 by vpoka             #+#    #+#             */
-/*   Updated: 2025/02/19 11:29:04 by vpoka            ###   ########.fr       */
+/*   Updated: 2025/02/19 15:50:46 by vpoka            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,7 +75,7 @@ static char	*get_cmd_path(char **cmd_array, char **envp)
 
 	if (!cmd_array || !cmd_array[0] || !envp)
 		return (NULL);
-	if (ft_strchr(cmd_array[0], '/'), access(cmd_array[0], F_OK) == 0)
+	if (ft_strchr(cmd_array[0], '/') && access(cmd_array[0], F_OK) == 0)
 		return (ft_strdup(cmd_array[0]));
 	path_dirs = get_path_dirs(envp);
 	if (!path_dirs)
