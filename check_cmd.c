@@ -6,7 +6,7 @@
 /*   By: vpoka <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/31 17:36:38 by vpoka             #+#    #+#             */
-/*   Updated: 2025/02/19 11:24:34 by vpoka            ###   ########.fr       */
+/*   Updated: 2025/02/19 11:29:04 by vpoka            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,7 +89,7 @@ void	set_cmd_vars(t_pdata *vars, char *cmd, char **envp)
 {
 	if (!cmd || !envp)
 	{
-		vars->error_msg = ft_strdup("Did not get needed variables");
+		vars->error_msg = ft_strdup("Missing variables in set_cmd_vars");
 		clean_exit(vars, EXIT_FAILURE, 0);
 	}
 	if (vars->cmd_array)
@@ -97,7 +97,7 @@ void	set_cmd_vars(t_pdata *vars, char *cmd, char **envp)
 	vars->cmd_array = ft_split(cmd, ' ');
 	if (!vars->cmd_array || !vars->cmd_array[0])
 	{
-		vars->error_msg = ft_strdup("ft_split failed");
+		vars->error_msg = ft_strdup("Split failed in set_cmd_vars");
 		clean_exit(vars, EXIT_FAILURE, 0);
 	}
 	if (vars->cmd_path)
