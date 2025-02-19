@@ -6,12 +6,18 @@
 /*   By: vpoka <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/05 14:22:59 by vpoka             #+#    #+#             */
-/*   Updated: 2025/02/19 19:23:45 by vpoka            ###   ########.fr       */
+/*   Updated: 2025/02/19 20:57:14 by vpoka            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "pipex.h"
 
+/**
+ * Maps system errno values to appropriate exit codes for command execution.
+ * Returns 126 for EACCES (permission denied), 127 for ENOENT (no such file),
+ * and EXIT_FAILURE for all other errors.
+ * @return int - The mapped exit code
+ */
 static int	map_errno_to_exit_code(void)
 {
 	if (errno == EACCES)
@@ -21,6 +27,12 @@ static int	map_errno_to_exit_code(void)
 	return (EXIT_FAILURE);
 }
 
+/**
+ * Sets up file descriptors for the first command in the pipeline.
+ * Duplicates input to STDIN and pipe write end to STDOUT.
+ * Closes unused file descriptors.
+ * @param data - Pointer to pipex structure containing file descriptors
+ */
 static void	setup_first_command(t_pipex *data)
 {
 	if (dup2(data->input, STDIN_FILENO) == -1)
@@ -30,6 +42,12 @@ static void	setup_first_command(t_pipex *data)
 	protected_close(NULL, data);
 }
 
+/**
+ * Sets up file descriptors for the last command in the pipeline.
+ * Duplicates pipe read end to STDIN and output to STDOUT.
+ * Closes unused file descriptors.
+ * @param data - Pointer to pipex structure containing file descriptors
+ */
 static void	setup_last_command(t_pipex *data)
 {
 	if (dup2(data->pipe_fd[0], STDIN_FILENO) == -1)
@@ -39,6 +57,14 @@ static void	setup_last_command(t_pipex *data)
 	protected_close(NULL, data);
 }
 
+/**
+ * Executes a command by forking a child process and setting up appropriate
+ * file descriptors based on command position in pipeline.
+ * @param data - Pointer to pipex structure containing command info
+ * @param envp - Environment variables array
+ * @param is_last_command - Flag indicating if this is the last command
+ * @return pid_t - Process ID of child process, or -1 on error
+ */
 pid_t	execute_command(t_pipex *data, char **envp, int is_last_command)
 {
 	pid_t	pid;

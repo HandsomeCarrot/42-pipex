@@ -6,12 +6,19 @@
 /*   By: vpoka <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/30 15:04:50 by vpoka             #+#    #+#             */
-/*   Updated: 2025/02/19 19:35:41 by vpoka            ###   ########.fr       */
+/*   Updated: 2025/02/19 21:22:05 by vpoka            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "pipex.h"
 
+/*
+** Initializes all members of the t_pipex structure to default values.
+** 
+** @param data: Pointer to t_pipex structure to initialize
+** 
+** Sets all file descriptors to -1 (invalid) and pointers to NULL.
+*/
 void	initialize_data(t_pipex *data)
 {
 	data->cmd_array = NULL;
@@ -26,6 +33,16 @@ void	initialize_data(t_pipex *data)
 	data->child[1] = -1;
 }
 
+/*
+** Opens input and output files for the pipex program.
+** 
+** @param data: Pointer to t_pipex structure to store file descriptors
+** @param input: Path to input file
+** @param output: Path to output file
+** 
+** Opens input file in read-only mode and output file in write-only mode,
+** creating it if necessary. Sets error messages and exits on failure.
+*/
 void	open_files(t_pipex *data, char *input, char *output)
 {
 	data->input = open(input, O_RDONLY);
@@ -44,6 +61,23 @@ void	open_files(t_pipex *data, char *input, char *output)
 	}
 }
 
+/*
+** Main entry point for the pipex program.
+** 
+** @param argc: Number of command line arguments
+** @param argv: Array of command line argument strings
+** @param envp: Array of environment variables
+** 
+** @return EXIT_SUCCESS on success, EXIT_FAILURE on error
+** 
+** Flow:
+** 1. Validates argument count (requires exactly 4 arguments)
+** 2. Creates pipe
+** 3. Opens input/output files
+** 4. Processes and executes commands
+** 5. Cleans up resources
+** 6. Waits for child processes
+*/
 int	main(int argc, char **argv, char **envp)
 {
 	t_pipex	data;
