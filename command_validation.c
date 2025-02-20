@@ -6,7 +6,7 @@
 /*   By: vpoka <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/31 17:36:38 by vpoka             #+#    #+#             */
-/*   Updated: 2025/02/19 20:49:30 by vpoka            ###   ########.fr       */
+/*   Updated: 2025/02/20 14:06:17 by vpoka            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -106,9 +106,9 @@ static char	*resolve_command_path(char **cmd_array, char **envp)
  */
 void	process_command(t_pipex *data, char *cmd, char **envp)
 {
-	if (!cmd || !envp)
+	if (!envp)
 	{
-		data->error_msg = ft_strdup("Missing variables in process_command");
+		data->error_msg = ft_strdup("Missing enviroment variable");
 		exit_program(data, EXIT_FAILURE, 0);
 	}
 	if (data->cmd_array)
@@ -116,7 +116,10 @@ void	process_command(t_pipex *data, char *cmd, char **envp)
 	data->cmd_array = ft_split(cmd, ' ');
 	if (!data->cmd_array || !data->cmd_array[0])
 	{
-		data->error_msg = ft_strdup("Split failed in process_command");
+		if (!data->cmd_path)
+			data->error_msg = ft_strdup("The first command is empty");
+		else
+			data->error_msg = ft_strdup("The second command is empty");
 		exit_program(data, EXIT_FAILURE, 0);
 	}
 	if (data->cmd_path)
