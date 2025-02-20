@@ -6,7 +6,7 @@
 /*   By: vpoka <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/05 14:22:59 by vpoka             #+#    #+#             */
-/*   Updated: 2025/02/20 18:26:05 by vpoka            ###   ########.fr       */
+/*   Updated: 2025/02/20 19:12:53 by vpoka            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,7 +84,7 @@ pid_t	execute_command(t_pipex *data, int is_last_command)
 			setup_first_command(data);
 		else
 			setup_last_command(data);
-		protected_close(data);
+		close_all_fds(data);
 		execve(data->cmd_path, data->cmd_array, data->envp);
 		data->error_msg = ft_strdup("Command failed");
 		data->error_file = ft_strdup(data->cmd_path);

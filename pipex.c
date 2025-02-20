@@ -6,7 +6,7 @@
 /*   By: vpoka <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/30 15:04:50 by vpoka             #+#    #+#             */
-/*   Updated: 2025/02/20 18:15:20 by vpoka            ###   ########.fr       */
+/*   Updated: 2025/02/20 19:13:05 by vpoka            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -101,7 +101,7 @@ int	main(int argc, char **argv, char **envp)
 	open_files(data, argv[1], argv[4]);
 	data->child[0] = execute_command(data, 0);
 	data->child[1] = execute_command(data, 1);
-	protected_close(data);
+	close_all_fds(data);
 	wait_for_child_processes(data);
 	exit_program(data, EXIT_SUCCESS, 0);
 }

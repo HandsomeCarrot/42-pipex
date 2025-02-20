@@ -6,7 +6,7 @@
 /*   By: vpoka <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/30 15:04:53 by vpoka             #+#    #+#             */
-/*   Updated: 2025/02/20 18:25:52 by vpoka            ###   ########.fr       */
+/*   Updated: 2025/02/20 19:12:31 by vpoka            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,7 +50,7 @@ pid_t		execute_command(t_pipex *data, int last);
 //----------cleanup.c----------//
 
 void		free_string_array(char **str);
-void		protected_close(t_pipex *data);
+void		close_all_fds(t_pipex *data);
 void		wait_for_child_processes(t_pipex *data);
 
 //----------exit.c----------//

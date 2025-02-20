@@ -6,7 +6,7 @@
 /*   By: vpoka <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/18 22:18:29 by vpoka             #+#    #+#             */
-/*   Updated: 2025/02/20 18:22:49 by vpoka            ###   ########.fr       */
+/*   Updated: 2025/02/20 19:18:27 by vpoka            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,13 +68,13 @@ void	exit_program(t_pipex *data, int exit_code, int include_errno)
 		free(data->cmd_path);
 		data->cmd_path = NULL;
 	}
-	if (data->input != -1)
+	if (data->input > 2)
 		close(data->input);
-	if (data->output != -1)
+	if (data->output > 2)
 		close(data->output);
-	if (data->pipe_fd[0] != -1)
+	if (data->pipe_fd[0] > 2)
 		close(data->pipe_fd[0]);
-	if (data->pipe_fd[1] != -1)
+	if (data->pipe_fd[1] > 2)
 		close(data->pipe_fd[1]);
 	free(data);
 	exit(exit_code);
