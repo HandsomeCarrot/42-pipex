@@ -6,7 +6,7 @@
 /*   By: vpoka <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/18 22:18:29 by vpoka             #+#    #+#             */
-/*   Updated: 2025/02/19 21:20:02 by vpoka            ###   ########.fr       */
+/*   Updated: 2025/02/20 13:24:50 by vpoka            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,8 @@ void	print_error(t_pipex *data, int include_errno)
 		data->error_file = NULL;
 	}
 	if (include_errno)
-		ft_putendl_fd(strerror(errno), STDERR_FILENO);
+		ft_putstr_fd(strerror(errno), STDERR_FILENO);
+	ft_putchar_fd('\n', STDERR_FILENO);
 }
 
 /**
