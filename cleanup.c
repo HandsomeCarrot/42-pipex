@@ -6,7 +6,7 @@
 /*   By: vpoka <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/07 22:09:03 by vpoka             #+#    #+#             */
-/*   Updated: 2025/02/20 14:35:56 by vpoka            ###   ########.fr       */
+/*   Updated: 2025/02/20 18:14:44 by vpoka            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,24 +45,31 @@ void	free_string_array(char **str)
  * @param file_descriptor Pointer to file descriptor integer
  * @param data Main pipex data structure for error tracking
  */
-void	protected_close(int *file_descriptor, t_pipex *data)
+void	protected_close(t_pipex *data)
 {
-	if (file_descriptor && *file_descriptor != -1)
+	if (data->pipe_fd[0] > 2 && close(data->pipe_fd[0]) == -1)
 	{
-		if (close(*file_descriptor) == -1)
-		{
-			data->error_msg = ft_strdup("Close failed for file_descriptor");
-			data->error_file = ft_itoa(*file_descriptor);
-			exit_program(data, EXIT_FAILURE, 1);
-		}
-		*file_descriptor = -1;
+		data->error_msg = ft_strdup("Close failed for file_descriptor");
+		data->error_file = ft_itoa(data->pipe_fd[0]);
+		exit_program(data, EXIT_FAILURE, 1);
 	}
-	else if (!file_descriptor)
+	if (data->pipe_fd[1] > 2 && close(data->pipe_fd[1]) == -1)
 	{
-		protected_close(&(data->pipe_fd[0]), data);
-		protected_close(&(data->pipe_fd[1]), data);
-		protected_close(&(data->input), data);
-		protected_close(&(data->output), data);
+		data->error_msg = ft_strdup("Close failed for file_descriptor");
+		data->error_file = ft_itoa(data->pipe_fd[1]);
+		exit_program(data, EXIT_FAILURE, 1);
+	}
+	if (data->input > 2 && close(data->input) == -1)
+	{
+		data->error_msg = ft_strdup("Close failed for file_descriptor");
+		data->error_file = ft_itoa(data->input);
+		exit_program(data, EXIT_FAILURE, 1);
+	}
+	if (data->output > 2 && close(data->output) == -1)
+	{
+		data->error_msg = ft_strdup("Close failed for file_descriptor");
+		data->error_file = ft_itoa(data->output);
+		exit_program(data, EXIT_FAILURE, 1);
 	}
 }
 

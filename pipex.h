@@ -6,7 +6,7 @@
 /*   By: vpoka <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/30 15:04:53 by vpoka             #+#    #+#             */
-/*   Updated: 2025/02/19 19:22:57 by vpoka            ###   ########.fr       */
+/*   Updated: 2025/02/20 18:25:52 by vpoka            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,8 @@
 
 typedef struct s_pipex
 {
+	char	**argv;
+	char	**envp;
 	char	**cmd_array;
 	char	*cmd_path;
 	char	*error_file;
@@ -35,23 +37,20 @@ typedef struct s_pipex
 
 //----------pipex.c----------//
 
-void		initialize_data(t_pipex *data);
-void		open_files(t_pipex *data, char *input, char *output);
-
 int			main(int argc, char **argv, char **envp);
 
 //----------command_validation.c----------//
 
-void		process_command(t_pipex *data, char *cmd, char **envp);
+void		process_command(t_pipex *data, char *cmd, int is_last_command);
 
 //----------execute_commands.c----------//
 
-pid_t		execute_command(t_pipex *data, char **envp, int last);
+pid_t		execute_command(t_pipex *data, int last);
 
 //----------cleanup.c----------//
 
 void		free_string_array(char **str);
-void		protected_close(int *fd, t_pipex *data);
+void		protected_close(t_pipex *data);
 void		wait_for_child_processes(t_pipex *data);
 
 //----------exit.c----------//

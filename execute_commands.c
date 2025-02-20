@@ -6,7 +6,7 @@
 /*   By: vpoka <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/05 14:22:59 by vpoka             #+#    #+#             */
-/*   Updated: 2025/02/20 14:15:54 by vpoka            ###   ########.fr       */
+/*   Updated: 2025/02/20 18:26:05 by vpoka            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,6 +35,7 @@ static int	map_errno_to_exit_code(void)
  */
 static void	setup_first_command(t_pipex *data)
 {
+	process_command(data, data->argv[2], 0);
 	if (dup2(data->input, STDIN_FILENO) == -1)
 		exit_program(data, EXIT_FAILURE, 0);
 	if (dup2(data->pipe_fd[1], STDOUT_FILENO) == -1)
@@ -49,6 +50,7 @@ static void	setup_first_command(t_pipex *data)
  */
 static void	setup_last_command(t_pipex *data)
 {
+	process_command(data, data->argv[3], 1);
 	if (dup2(data->pipe_fd[0], STDIN_FILENO) == -1)
 		exit_program(data, EXIT_FAILURE, 0);
 	if (dup2(data->output, STDOUT_FILENO) == -1)
@@ -58,12 +60,12 @@ static void	setup_last_command(t_pipex *data)
 /**
  * Executes a command by forking a child process and setting up appropriate
  * file descriptors based on command position in pipeline.
+ * 
  * @param data - Pointer to pipex structure containing command info
- * @param envp - Environment variables array
  * @param is_last_command - Flag indicating if this is the last command
  * @return pid_t - Process ID of child process, or -1 on error
  */
-pid_t	execute_command(t_pipex *data, char **envp, int is_last_command)
+pid_t	execute_command(t_pipex *data, int is_last_command)
 {
 	pid_t	pid;
 
@@ -82,8 +84,8 @@ pid_t	execute_command(t_pipex *data, char **envp, int is_last_command)
 			setup_first_command(data);
 		else
 			setup_last_command(data);
-		protected_close(NULL, data);
-		execve(data->cmd_path, data->cmd_array, envp);
+		protected_close(data);
+		execve(data->cmd_path, data->cmd_array, data->envp);
 		data->error_msg = ft_strdup("Command failed");
 		data->error_file = ft_strdup(data->cmd_path);
 		exit_program(data, map_errno_to_exit_code(), 1);

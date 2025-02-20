@@ -6,7 +6,7 @@
 /*   By: vpoka <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/31 17:36:38 by vpoka             #+#    #+#             */
-/*   Updated: 2025/02/20 14:06:17 by vpoka            ###   ########.fr       */
+/*   Updated: 2025/02/20 18:27:17 by vpoka            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -104,9 +104,9 @@ static char	*resolve_command_path(char **cmd_array, char **envp)
  * @param cmd - command string to process
  * @param envp - array of environment variables
  */
-void	process_command(t_pipex *data, char *cmd, char **envp)
+void	process_command(t_pipex *data, char *cmd, int is_last_command)
 {
-	if (!envp)
+	if (!data->envp)
 	{
 		data->error_msg = ft_strdup("Missing enviroment variable");
 		exit_program(data, EXIT_FAILURE, 0);
@@ -114,9 +114,9 @@ void	process_command(t_pipex *data, char *cmd, char **envp)
 	if (data->cmd_array)
 		free_string_array(data->cmd_array);
 	data->cmd_array = ft_split(cmd, ' ');
-	if (!data->cmd_array || !data->cmd_array[0])
+	if (!data->cmd_array[0])
 	{
-		if (!data->cmd_path)
+		if (!is_last_command)
 			data->error_msg = ft_strdup("The first command is empty");
 		else
 			data->error_msg = ft_strdup("The second command is empty");
@@ -124,7 +124,7 @@ void	process_command(t_pipex *data, char *cmd, char **envp)
 	}
 	if (data->cmd_path)
 		free(data->cmd_path);
-	data->cmd_path = resolve_command_path(data->cmd_array, envp);
+	data->cmd_path = resolve_command_path(data->cmd_array, data->envp);
 	if (!data->cmd_path)
 		data->cmd_path = ft_strdup(data->cmd_array[0]);
 }
