@@ -6,7 +6,7 @@
 /*   By: vpoka <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/07 22:09:03 by vpoka             #+#    #+#             */
-/*   Updated: 2025/02/19 21:14:37 by vpoka            ###   ########.fr       */
+/*   Updated: 2025/02/20 14:35:56 by vpoka            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,11 +83,11 @@ void	wait_for_child_processes(t_pipex *data)
 		data->error_msg = ft_strdup("Waitpid failed for 1st command");
 		exit_program(data, EXIT_FAILURE, 1);
 	}
-	if (waitpid(data->child[1], &status, 0) == -1)
+	if (data->child[1] != -1 && waitpid(data->child[1], &status, 0) == -1)
 	{
 		data->error_msg = ft_strdup("Waitpid failed for 2nd command");
 		exit_program(data, EXIT_FAILURE, 1);
 	}
-	if (WIFEXITED(status))
+	if (data->child[1] != -1 && WIFEXITED(status))
 		exit_program(data, WEXITSTATUS(status), 0);
 }
