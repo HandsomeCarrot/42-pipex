@@ -6,7 +6,7 @@
 /*   By: vpoka <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/18 22:18:29 by vpoka             #+#    #+#             */
-/*   Updated: 2025/02/20 13:24:50 by vpoka            ###   ########.fr       */
+/*   Updated: 2025/02/20 14:13:34 by vpoka            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,6 +29,8 @@ void	print_error(t_pipex *data, int include_errno)
 		ft_putstr_fd(data->error_msg, STDERR_FILENO);
 		if (data->error_file || include_errno)
 			ft_putstr_fd(": ", STDERR_FILENO);
+		else
+			ft_putchar_fd('\n', STDERR_FILENO);
 		free(data->error_msg);
 		data->error_msg = NULL;
 	}
@@ -37,12 +39,13 @@ void	print_error(t_pipex *data, int include_errno)
 		ft_putstr_fd(data->error_file, STDERR_FILENO);
 		if (include_errno)
 			ft_putstr_fd(": ", STDERR_FILENO);
+		else
+			ft_putchar_fd('\n', STDERR_FILENO);
 		free(data->error_file);
 		data->error_file = NULL;
 	}
 	if (include_errno)
-		ft_putstr_fd(strerror(errno), STDERR_FILENO);
-	ft_putchar_fd('\n', STDERR_FILENO);
+		ft_putendl_fd(strerror(errno), STDERR_FILENO);
 }
 
 /**
