@@ -6,7 +6,7 @@
 /*   By: vpoka <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/05 14:22:59 by vpoka             #+#    #+#             */
-/*   Updated: 2025/02/19 20:57:14 by vpoka            ###   ########.fr       */
+/*   Updated: 2025/02/20 14:15:54 by vpoka            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,6 @@ static void	setup_first_command(t_pipex *data)
 		exit_program(data, EXIT_FAILURE, 0);
 	if (dup2(data->pipe_fd[1], STDOUT_FILENO) == -1)
 		exit_program(data, EXIT_FAILURE, 0);
-	protected_close(NULL, data);
 }
 
 /**
@@ -54,7 +53,6 @@ static void	setup_last_command(t_pipex *data)
 		exit_program(data, EXIT_FAILURE, 0);
 	if (dup2(data->output, STDOUT_FILENO) == -1)
 		exit_program(data, EXIT_FAILURE, 0);
-	protected_close(NULL, data);
 }
 
 /**
@@ -82,8 +80,9 @@ pid_t	execute_command(t_pipex *data, char **envp, int is_last_command)
 	{
 		if (!is_last_command)
 			setup_first_command(data);
-		else if (is_last_command)
+		else
 			setup_last_command(data);
+		protected_close(NULL, data);
 		execve(data->cmd_path, data->cmd_array, envp);
 		data->error_msg = ft_strdup("Command failed");
 		data->error_file = ft_strdup(data->cmd_path);
