@@ -6,7 +6,7 @@
 /*   By: vpoka <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/30 15:04:50 by vpoka             #+#    #+#             */
-/*   Updated: 2025/02/20 19:13:05 by vpoka            ###   ########.fr       */
+/*   Updated: 2025/02/20 22:21:16 by vpoka            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -103,5 +103,7 @@ int	main(int argc, char **argv, char **envp)
 	data->child[1] = execute_command(data, 1);
 	close_all_fds(data);
 	wait_for_child_processes(data);
-	exit_program(data, EXIT_SUCCESS, 0);
+	if (data->child[1] != -1)
+		exit_program(data, EXIT_SUCCESS, 0);
+	exit_program(data, EXIT_FAILURE, 0);
 }
