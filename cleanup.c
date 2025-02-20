@@ -6,7 +6,7 @@
 /*   By: vpoka <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/07 22:09:03 by vpoka             #+#    #+#             */
-/*   Updated: 2025/02/20 19:43:59 by vpoka            ###   ########.fr       */
+/*   Updated: 2025/02/20 22:09:39 by vpoka            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,7 +43,6 @@ static void	protected_close(t_pipex *data, int *fd)
 		data->error_file = ft_itoa(*fd);
 		exit_program(data, EXIT_FAILURE, 1);
 	}
-	
 	else if (*fd > 2)
 		*fd = -1;
 }
