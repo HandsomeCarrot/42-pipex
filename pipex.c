@@ -6,7 +6,7 @@
 /*   By: vpoka <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/30 15:04:50 by vpoka             #+#    #+#             */
-/*   Updated: 2025/02/21 13:55:45 by vpoka            ###   ########.fr       */
+/*   Updated: 2025/02/21 14:17:11 by vpoka            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,26 +19,16 @@
 ** 
 ** Sets all file descriptors to -1 (invalid) and pointers to NULL.
 */
-static t_pipex	*initialize_data(t_pipex *data, char **argv, char **envp)
+static void	initialize_data(t_pipex *data, char **argv, char **envp)
 {
-	t_pipex *new_data;
-
-	new_data = ft_calloc(1, sizeof(t_pipex));
-	if (!data)
-	{
-		ft_putendl_fd("Space allocation failed", STDERR_FILENO);
-		exit(1);
-	}
 	data->argv = argv;
 	data->envp = envp;
-	data->cmd_array = NULL;
-	data->cmd_path = NULL;
-	data->error_file = NULL;
-	data->error_msg = NULL;
-	data->input = -1;
-	data->output = -1;
-	data->pipe_fd[0] = -1;
-	data->pipe_fd[1] = -1;
+	open_files(data);
+	if (pipe(data->pipe_fd) == -1)
+	{
+		data->error_msg = ft_strdup("Creating pipe failed");
+		exit_program(data, EXIT_FAILURE, 1);
+	}
 	data->child[0] = -1;
 	data->child[1] = -1;
 }
@@ -47,8 +37,6 @@ static t_pipex	*initialize_data(t_pipex *data, char **argv, char **envp)
 ** Opens input and output files for the pipex program.
 ** 
 ** @param data: Pointer to t_pipex structure to store file descriptors
-** @param input: Path to input file
-** @param output: Path to output file
 ** 
 ** Opens input file in read-only mode and output file in write-only mode,
 ** creating it if necessary. Sets error messages and exits on failure.
@@ -97,18 +85,18 @@ int	main(int argc, char **argv, char **envp)
 {
 	t_pipex	*data;
 
-	data = initialize_data(data, argv, envp);
+	data = ft_calloc(1, sizeof(t_pipex));
+	if (!data)
+	{
+		ft_putendl_fd("Space allocation failed", STDERR_FILENO);
+		exit(1);
+	}
 	if (argc != 5)
 	{
 		data->error_msg = ft_strdup("Exactly 4 arguments needed");
 		exit_program(data, EXIT_FAILURE, 0);
 	}
-	if (pipe(data->pipe_fd) == -1)
-	{
-		data->error_msg = ft_strdup("Pipe failed");
-		exit_program(data, EXIT_FAILURE, 1);
-	}
-	open_files(data);
+	initialize_data(data, argv, envp);
 	validate_commands(data);
 	data->child[0] = execute_command(data, 0);
 	data->child[1] = execute_command(data, 1);
