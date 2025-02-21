@@ -6,28 +6,11 @@
 /*   By: vpoka <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/05 14:22:59 by vpoka             #+#    #+#             */
-/*   Updated: 2025/02/21 16:02:27 by vpoka            ###   ########.fr       */
+/*   Updated: 2025/02/21 16:08:42 by vpoka            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "pipex.h"
-
-/**
- * Maps system errno values to appropriate exit codes for command execution.
- * Returns 126 for EACCES (permission denied), 127 for ENOENT (no such file),
- * and EXIT_FAILURE for all other errors.
- * @return int - The mapped exit code
- */
-static int	map_errno_to_exit_code(t_pipex *data)
-{
-	data->msg1 = ft_strdup("command failed");
-	data->msg2 = ft_strdup(data->cmd_paths);
-	if (errno == EACCES)
-		return (126);
-	else if (errno == ENOENT)
-		return (127);
-	return (EXIT_FAILURE);
-}
 
 /**
  * Sets up file descriptors for the first command in the pipeline.
@@ -86,7 +69,9 @@ pid_t	execute_command(t_pipex *data, int last)
 			setup_last_command(data);
 		close_all_fds(data);
 		execve(data->cmd_paths[last],data->cmd_arrays[last], data->envp);
-		exit_program(data, map_errno_to_exit_code(data), 1);
+		data->msg1 = ft_strdup("command failed");
+		data->msg2 = ft_strdup(data->cmd_paths);
+		exit_program(data, 126, 1);
 	}
 	return (pid);
 }
