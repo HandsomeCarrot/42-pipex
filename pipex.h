@@ -6,7 +6,7 @@
 /*   By: vpoka <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/30 15:04:53 by vpoka             #+#    #+#             */
-/*   Updated: 2025/02/21 15:58:30 by vpoka            ###   ########.fr       */
+/*   Updated: 2025/02/21 17:38:45 by vpoka            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,7 +55,7 @@ void		wait_for_child_processes(t_pipex *data);
 
 //----------exit.c----------//
 
-void		print_error(t_pipex *data, int error);
-void		exit_program(t_pipex *data, int exit_status, int error);
+void		print_error(t_pipex *data, int include_errno);
+void		exit_program(t_pipex *data, int exit_code, int include_errno);
 
 #endif
