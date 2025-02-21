@@ -6,7 +6,7 @@
 /*   By: vpoka <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/18 22:18:29 by vpoka             #+#    #+#             */
-/*   Updated: 2025/02/21 16:41:58 by vpoka            ###   ########.fr       */
+/*   Updated: 2025/02/21 17:25:16 by vpoka            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,7 @@ void	print_error(t_pipex *data, int include_errno)
 	if (data->msg1)
 	{
 		ft_putstr_fd(data->msg1, STDERR_FILENO);
-		if (data->msg1 || include_errno)
+		if (data->msg2 || include_errno)
 			ft_putstr_fd(": ", STDERR_FILENO);
 		else
 			ft_putchar_fd('\n', STDERR_FILENO);
