@@ -6,7 +6,7 @@
 /*   By: vpoka <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/31 17:36:38 by vpoka             #+#    #+#             */
-/*   Updated: 2025/02/21 16:23:27 by vpoka            ###   ########.fr       */
+/*   Updated: 2025/02/21 16:36:02 by vpoka            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -110,10 +110,10 @@ void	process_command(t_pipex *data, int last)
 		data->cmd_paths[last] = resolve_command_path(data, last);
 	if (!data->cmd_arrays[last] || !data->cmd_paths[last])
 	{
-		if (!data->cmd_paths[last])
+		if (!data->cmd_arrays[last])
 			data->msg1 = ft_strdup(" ");
 		else
-			data->msg1 = ft_strdup(data->cmd_paths[last]);
+			data->msg1 = ft_strdup(data->cmd_arrays[last][0]);
 		data->msg2 = ft_strdup("command not found");
 		if (last)
 			exit_program(data, 127, 0);

@@ -6,7 +6,7 @@
 /*   By: vpoka <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/18 22:18:29 by vpoka             #+#    #+#             */
-/*   Updated: 2025/02/21 16:12:43 by vpoka            ###   ########.fr       */
+/*   Updated: 2025/02/21 16:41:58 by vpoka            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,13 +62,13 @@ void	exit_program(t_pipex *data, int exit_code, int include_errno)
 {
 	print_error(data, include_errno);
 	if (data->cmd_arrays[0])
-	    free_string_array(data->cmd_arrays[0]);
+		free_string_array(data->cmd_arrays[0]);
 	if (data->cmd_arrays[1])
-	    free_string_array(data->cmd_arrays[1]);
+		free_string_array(data->cmd_arrays[1]);
 	if (data->cmd_paths[0])
-	    free(data->cmd_paths[0]);
+		free(data->cmd_paths[0]);
 	if (data->cmd_paths[1])
-	    free(data->cmd_paths[1]);
+		free(data->cmd_paths[1]);
 	if (data->input > 2)
 		close(data->input);
 	if (data->output > 2)
