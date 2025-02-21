@@ -6,7 +6,7 @@
 /*   By: vpoka <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/05 14:22:59 by vpoka             #+#    #+#             */
-/*   Updated: 2025/02/21 16:08:42 by vpoka            ###   ########.fr       */
+/*   Updated: 2025/02/21 16:11:19 by vpoka            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,7 +70,7 @@ pid_t	execute_command(t_pipex *data, int last)
 		close_all_fds(data);
 		execve(data->cmd_paths[last],data->cmd_arrays[last], data->envp);
 		data->msg1 = ft_strdup("command failed");
-		data->msg2 = ft_strdup(data->cmd_paths);
+		data->msg2 = ft_strdup(data->cmd_paths[last]);
 		exit_program(data, 126, 1);
 	}
 	return (pid);
