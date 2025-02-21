@@ -6,20 +6,20 @@
 /*   By: vpoka <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/30 15:04:50 by vpoka             #+#    #+#             */
-/*   Updated: 2025/02/21 17:07:02 by vpoka            ###   ########.fr       */
+/*   Updated: 2025/02/21 18:20:28 by vpoka            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "pipex.h"
 
 /**
-* Opens input and output files for the pipex program.
-* 
-* @param data: Pointer to t_pipex structure to store file descriptors
-* 
-* Opens input file in read-only mode and output file in write-only mode,
-* creating it if necessary. Sets error messages and exits on failure.
-*/
+ * @brief Opens input and output files for the pipex program
+ *
+ * @param data Pointer to t_pipex structure to store file descriptors
+ *
+ * Opens input file in read-only mode and output file in write-only mode,
+ * creating it if necessary. Sets error messages and prints them.
+ */
 static void	open_files(t_pipex *data)
 {
 	data->input = open(data->argv[1], O_RDONLY);
@@ -38,6 +38,16 @@ static void	open_files(t_pipex *data)
 	}
 }
 
+/**
+ * @brief Initialize the pipex data structure with program arguments
+ *
+ * @param data Pointer to pipex data structure to initialize
+ * @param argv Array of command line arguments
+ * @param envp Array of environment variables
+ *
+ * Sets up initial program state including command arrays, file descriptors,
+ * and pipe creation. Processes both commands in the pipeline.
+ */
 static void	initialize_data(t_pipex *data, char **argv, char **envp)
 {
 	data->argv = argv;
@@ -57,22 +67,21 @@ static void	initialize_data(t_pipex *data, char **argv, char **envp)
 }
 
 /**
-* Main entry point for the pipex program.
-* 
-* @param argc: Number of command line arguments
-* @param argv: Array of command line argument strings
-* @param envp: Array of environment variables
-* 
-* @return EXIT_SUCCESS on success, EXIT_FAILURE on error
-* 
-* Flow:
-* 1. Validates argument count (requires exactly 4 arguments)
-* 2. Creates pipe
-* 3. Opens input/output files
-* 4. Processes and executes commands
-* 5. Cleans up resources
-* 6. Waits for child processes
-*/
+ * @brief Main entry point for the pipex program
+ *
+ * @param argc Number of command line arguments
+ * @param argv Array of command line argument strings
+ * @param envp Array of environment variables
+ * @return int EXIT_SUCCESS on success, EXIT_FAILURE on error
+ *
+ * Implements Unix pipe behavior to execute commands in a pipeline:
+ * 1. Validates argument count (requires exactly 4 arguments)
+ * 2. Creates pipe for inter-process communication
+ * 3. Opens input/output files
+ * 4. Processes and executes commands
+ * 5. Cleans up resources
+ * 6. Waits for child processes to complete
+ */
 int	main(int argc, char **argv, char **envp)
 {
 	t_pipex	*data;

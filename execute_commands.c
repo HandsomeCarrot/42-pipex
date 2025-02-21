@@ -6,17 +6,19 @@
 /*   By: vpoka <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/05 14:22:59 by vpoka             #+#    #+#             */
-/*   Updated: 2025/02/21 17:07:15 by vpoka            ###   ########.fr       */
+/*   Updated: 2025/02/21 18:24:25 by vpoka            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "pipex.h"
 
 /**
- * Sets up file descriptors for the first command in the pipeline.
+ * @brief Sets up file descriptors for the first command
+ *
+ * @param data Pointer to pipex structure containing file descriptors
+ *
  * Duplicates input to STDIN and pipe write end to STDOUT.
- * Closes unused file descriptors.
- * @param data - Pointer to pipex structure containing file descriptors
+ * Exits program on duplication failure.
  */
 static void	setup_first_command(t_pipex *data)
 {
@@ -27,10 +29,12 @@ static void	setup_first_command(t_pipex *data)
 }
 
 /**
- * Sets up file descriptors for the last command in the pipeline.
+ * @brief Sets up file descriptors for the last command
+ *
+ * @param data Pointer to pipex structure containing file descriptors
+ *
  * Duplicates pipe read end to STDIN and output to STDOUT.
- * Closes unused file descriptors.
- * @param data - Pointer to pipex structure containing file descriptors
+ * Exits program on duplication failure.
  */
 static void	setup_last_command(t_pipex *data)
 {
@@ -41,12 +45,15 @@ static void	setup_last_command(t_pipex *data)
 }
 
 /**
- * Executes a command by forking a child process and setting up appropriate
- * file descriptors based on command position in pipeline.
- * 
- * @param data - Pointer to pipex structure containing command info
- * @param last - Flag indicating if this is the last command
- * @return pid_t - Process ID of child process, or -1 on error
+ * @brief Execute a command in the pipeline
+ *
+ * @param data Pointer to pipex structure containing command info
+ * @param last Flag indicating if this is the last command
+ * @return pid_t Process ID of child process, or -1 on error
+ *
+ * Forks a child process and sets up appropriate file descriptors based on
+ * command position in pipeline. Handles execution errors and file descriptor
+ * setup.
  */
 pid_t	execute_command(t_pipex *data, int last)
 {

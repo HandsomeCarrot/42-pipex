@@ -6,17 +6,20 @@
 /*   By: vpoka <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/31 17:36:38 by vpoka             #+#    #+#             */
-/*   Updated: 2025/02/21 17:07:08 by vpoka            ###   ########.fr       */
+/*   Updated: 2025/02/21 18:23:30 by vpoka            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "pipex.h"
 
 /**
- * Extracts PATH directories from environment variables
- * Searches envp array for PATH variable and splits its value by ':'
- * @param envp - array of environment variables
- * @return array of PATH directories, or NULL if PATH not found
+ * @brief Extracts PATH directories from environment variables
+ *
+ * @param envp Array of environment variables
+ * @return Array of PATH directories, or NULL if PATH not found
+ *
+ * Searches envp array for PATH variable and splits its value by ':' to get
+ * the list of directories to search for executables.
  */
 static char	**extract_path_directories(char **envp)
 {
@@ -33,10 +36,14 @@ static char	**extract_path_directories(char **envp)
 }
 
 /**
- * Builds full command path by joining directory and command
- * @param dir - directory path
- * @param cmd - command name
- * @return full path to command, or NULL on allocation failure
+ * @brief Builds full command path by joining directory and command
+ *
+ * @param dir Directory path to prepend
+ * @param cmd Command name to append
+ * @return Full path to command, or NULL on allocation failure
+ *
+ * Concatenates directory path with command name, adding '/' between them.
+ * Returns newly allocated string with full path.
  */
 static char	*build_command_path(char *dir, char *cmd)
 {
@@ -52,10 +59,14 @@ static char	*build_command_path(char *dir, char *cmd)
 }
 
 /**
- * Finds executable path by checking each PATH directory
- * @param paths - array of PATH directories to search
- * @param cmd_array - command array containing command name
- * @return full path to executable if found, NULL otherwise
+ * @brief Finds executable path by checking each PATH directory
+ *
+ * @param paths Array of PATH directories to search
+ * @param cmd_array Command array containing command name
+ * @return Full path to executable if found, NULL otherwise
+ *
+ * Tries each PATH directory until finding an executable matching the command
+ * name. Returns allocated string with full path or NULL if not found.
  */
 static char	*find_executable_path(char **paths, char **cmd_array)
 {
@@ -76,6 +87,16 @@ static char	*find_executable_path(char **paths, char **cmd_array)
 	return (NULL);
 }
 
+/**
+ * @brief Resolves full path for a command
+ *
+ * @param data Main pipex data structure
+ * @param last Flag indicating if this is the last command
+ * @return Full path to command if found, NULL otherwise
+ *
+ * Handles both absolute paths and PATH search to find command executable.
+ * For absolute paths, verifies existence. For other commands, searches PATH.
+ */
 static char	*resolve_command_path(t_pipex *data, int last)
 {
 	char	**path_dirs;
@@ -98,6 +119,15 @@ static char	*resolve_command_path(t_pipex *data, int last)
 	}
 }
 
+/**
+ * @brief Process and validate a command in the pipeline
+ *
+ * @param data Pointer to pipex structure containing program state
+ * @param last Flag indicating if this is the last command
+ *
+ * Validates environment variables, splits command string into arguments,
+ * resolves command path, and handles command not found errors.
+ */
 void	process_command(t_pipex *data, int last)
 {
 	if (!data->envp)
