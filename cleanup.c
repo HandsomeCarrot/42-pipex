@@ -6,7 +6,7 @@
 /*   By: vpoka <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/07 22:09:03 by vpoka             #+#    #+#             */
-/*   Updated: 2025/02/20 22:09:39 by vpoka            ###   ########.fr       */
+/*   Updated: 2025/02/21 13:52:29 by vpoka            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,7 @@ static void	protected_close(t_pipex *data, int *fd)
 {
 	if (*fd > 2 && close(*fd) == -1)
 	{
-		data->error_msg = ft_strdup("Close failed for file descriptor");
+		data->error_msg = ft_strdup("Failed to close file descriptor");
 		data->error_file = ft_itoa(*fd);
 		exit_program(data, EXIT_FAILURE, 1);
 	}

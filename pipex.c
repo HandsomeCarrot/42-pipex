@@ -6,7 +6,7 @@
 /*   By: vpoka <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/30 15:04:50 by vpoka             #+#    #+#             */
-/*   Updated: 2025/02/21 12:22:52 by vpoka            ###   ########.fr       */
+/*   Updated: 2025/02/21 13:55:45 by vpoka            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,20 +53,20 @@ static t_pipex	*initialize_data(t_pipex *data, char **argv, char **envp)
 ** Opens input file in read-only mode and output file in write-only mode,
 ** creating it if necessary. Sets error messages and exits on failure.
 */
-static void	open_files(t_pipex *data, char *input, char *output)
+static void	open_files(t_pipex *data)
 {
-	data->input = open(input, O_RDONLY);
+	data->input = open(data->argv[1], O_RDONLY);
 	if (data->input == -1)
 	{
 		data->error_msg = ft_strdup("Input file");
-		data->error_file = ft_strdup(input);
+		data->error_file = ft_strdup(data->argv[1]);
 		print_error(data, 1);
 	}
-	data->output = open(output, O_WRONLY | O_CREAT | O_TRUNC, 0644);
+	data->output = open(data->argv[4], O_WRONLY | O_CREAT | O_TRUNC, 0644);
 	if (data->output == -1)
 	{
 		data->error_msg = ft_strdup("Output file");
-		data->error_file = ft_strdup(output);
+		data->error_file = ft_strdup(data->argv[4]);
 		print_error(data, 1);
 	}
 }
@@ -108,7 +108,7 @@ int	main(int argc, char **argv, char **envp)
 		data->error_msg = ft_strdup("Pipe failed");
 		exit_program(data, EXIT_FAILURE, 1);
 	}
-	open_files(data, argv[1], argv[4]);
+	open_files(data);
 	validate_commands(data);
 	data->child[0] = execute_command(data, 0);
 	data->child[1] = execute_command(data, 1);
