@@ -6,7 +6,7 @@
 /*   By: vpoka <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/31 17:36:38 by vpoka             #+#    #+#             */
-/*   Updated: 2025/02/20 18:27:17 by vpoka            ###   ########.fr       */
+/*   Updated: 2025/02/21 12:18:09 by vpoka            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -114,16 +114,10 @@ void	process_command(t_pipex *data, char *cmd, int is_last_command)
 	if (data->cmd_array)
 		free_string_array(data->cmd_array);
 	data->cmd_array = ft_split(cmd, ' ');
-	if (!data->cmd_array[0])
-	{
-		if (!is_last_command)
-			data->error_msg = ft_strdup("The first command is empty");
-		else
-			data->error_msg = ft_strdup("The second command is empty");
-		exit_program(data, EXIT_FAILURE, 0);
-	}
 	if (data->cmd_path)
 		free(data->cmd_path);
+	if (!data->cmd_array[0])
+		return ;
 	data->cmd_path = resolve_command_path(data->cmd_array, data->envp);
 	if (!data->cmd_path)
 		data->cmd_path = ft_strdup(data->cmd_array[0]);

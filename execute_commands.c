@@ -6,7 +6,7 @@
 /*   By: vpoka <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/05 14:22:59 by vpoka             #+#    #+#             */
-/*   Updated: 2025/02/20 19:12:53 by vpoka            ###   ########.fr       */
+/*   Updated: 2025/02/21 12:10:37 by vpoka            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,8 +18,10 @@
  * and EXIT_FAILURE for all other errors.
  * @return int - The mapped exit code
  */
-static int	map_errno_to_exit_code(void)
+static int	map_errno_to_exit_code(t_pipex *data)
 {
+	data->error_msg = ft_strdup("Command failed");
+	data->error_file = ft_strdup(data->cmd_path);
 	if (errno == EACCES)
 		return (126);
 	else if (errno == ENOENT)
@@ -75,7 +77,7 @@ pid_t	execute_command(t_pipex *data, int is_last_command)
 	pid = fork();
 	if (pid == -1)
 	{
-		data->error_msg = ft_strdup("Fork failed in execute_command");
+		data->error_msg = ft_strdup("Failed to create child procces");
 		exit_program(data, EXIT_FAILURE, 1);
 	}
 	if (pid == 0)
@@ -86,9 +88,7 @@ pid_t	execute_command(t_pipex *data, int is_last_command)
 			setup_last_command(data);
 		close_all_fds(data);
 		execve(data->cmd_path, data->cmd_array, data->envp);
-		data->error_msg = ft_strdup("Command failed");
-		data->error_file = ft_strdup(data->cmd_path);
-		exit_program(data, map_errno_to_exit_code(), 1);
+		exit_program(data, map_errno_to_exit_code(data), 1);
 	}
 	return (pid);
 }

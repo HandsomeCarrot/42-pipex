@@ -6,7 +6,7 @@
 /*   By: vpoka <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/30 15:04:50 by vpoka             #+#    #+#             */
-/*   Updated: 2025/02/20 22:21:16 by vpoka            ###   ########.fr       */
+/*   Updated: 2025/02/21 12:22:52 by vpoka            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,8 +19,16 @@
 ** 
 ** Sets all file descriptors to -1 (invalid) and pointers to NULL.
 */
-static void	initialize_data(t_pipex *data, char **argv, char **envp)
+static t_pipex	*initialize_data(t_pipex *data, char **argv, char **envp)
 {
+	t_pipex *new_data;
+
+	new_data = ft_calloc(1, sizeof(t_pipex));
+	if (!data)
+	{
+		ft_putendl_fd("Space allocation failed", STDERR_FILENO);
+		exit(1);
+	}
 	data->argv = argv;
 	data->envp = envp;
 	data->cmd_array = NULL;
@@ -63,6 +71,11 @@ static void	open_files(t_pipex *data, char *input, char *output)
 	}
 }
 
+static void	validate_commands(t_pipex *data)
+{
+
+}
+
 /*
 ** Main entry point for the pipex program.
 ** 
@@ -84,10 +97,7 @@ int	main(int argc, char **argv, char **envp)
 {
 	t_pipex	*data;
 
-	data = ft_calloc(1, sizeof(t_pipex));
-	if (!data)
-		exit(1);
-	initialize_data(data, argv, envp);
+	data = initialize_data(data, argv, envp);
 	if (argc != 5)
 	{
 		data->error_msg = ft_strdup("Exactly 4 arguments needed");
@@ -99,6 +109,7 @@ int	main(int argc, char **argv, char **envp)
 		exit_program(data, EXIT_FAILURE, 1);
 	}
 	open_files(data, argv[1], argv[4]);
+	validate_commands(data);
 	data->child[0] = execute_command(data, 0);
 	data->child[1] = execute_command(data, 1);
 	close_all_fds(data);
