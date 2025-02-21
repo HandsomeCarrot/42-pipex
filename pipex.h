@@ -6,7 +6,7 @@
 /*   By: vpoka <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/30 15:04:53 by vpoka             #+#    #+#             */
-/*   Updated: 2025/02/20 19:12:31 by vpoka            ###   ########.fr       */
+/*   Updated: 2025/02/21 15:58:30 by vpoka            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,10 +25,10 @@ typedef struct s_pipex
 {
 	char	**argv;
 	char	**envp;
-	char	**cmd_array;
-	char	*cmd_path;
-	char	*error_file;
-	char	*error_msg;
+	char	**cmd_arrays[3];
+	char	*cmd_paths[3];
+	char	*msg1;
+	char	*msg2;
 	int		input;
 	int		output;
 	int		pipe_fd[2];
@@ -41,7 +41,7 @@ int			main(int argc, char **argv, char **envp);
 
 //----------command_validation.c----------//
 
-void		process_command(t_pipex *data, char *cmd, int is_last_command);
+void		process_command(t_pipex *data, int last);
 
 //----------execute_commands.c----------//
 

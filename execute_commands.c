@@ -6,7 +6,7 @@
 /*   By: vpoka <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/05 14:22:59 by vpoka             #+#    #+#             */
-/*   Updated: 2025/02/21 12:10:37 by vpoka            ###   ########.fr       */
+/*   Updated: 2025/02/21 16:02:27 by vpoka            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,8 +20,8 @@
  */
 static int	map_errno_to_exit_code(t_pipex *data)
 {
-	data->error_msg = ft_strdup("Command failed");
-	data->error_file = ft_strdup(data->cmd_path);
+	data->msg1 = ft_strdup("command failed");
+	data->msg2 = ft_strdup(data->cmd_paths);
 	if (errno == EACCES)
 		return (126);
 	else if (errno == ENOENT)
@@ -37,7 +37,6 @@ static int	map_errno_to_exit_code(t_pipex *data)
  */
 static void	setup_first_command(t_pipex *data)
 {
-	process_command(data, data->argv[2], 0);
 	if (dup2(data->input, STDIN_FILENO) == -1)
 		exit_program(data, EXIT_FAILURE, 0);
 	if (dup2(data->pipe_fd[1], STDOUT_FILENO) == -1)
@@ -52,7 +51,6 @@ static void	setup_first_command(t_pipex *data)
  */
 static void	setup_last_command(t_pipex *data)
 {
-	process_command(data, data->argv[3], 1);
 	if (dup2(data->pipe_fd[0], STDIN_FILENO) == -1)
 		exit_program(data, EXIT_FAILURE, 0);
 	if (dup2(data->output, STDOUT_FILENO) == -1)
@@ -64,30 +62,30 @@ static void	setup_last_command(t_pipex *data)
  * file descriptors based on command position in pipeline.
  * 
  * @param data - Pointer to pipex structure containing command info
- * @param is_last_command - Flag indicating if this is the last command
+ * @param last - Flag indicating if this is the last command
  * @return pid_t - Process ID of child process, or -1 on error
  */
-pid_t	execute_command(t_pipex *data, int is_last_command)
+pid_t	execute_command(t_pipex *data, int last)
 {
 	pid_t	pid;
 
-	if ((!is_last_command && data->input == -1)
-		|| (is_last_command && data->output == -1))
+	if ((!last && (data->input == -1 || !data->cmd_paths[last]))
+		|| (last && data->output == -1))
 		return (-1);
 	pid = fork();
 	if (pid == -1)
 	{
-		data->error_msg = ft_strdup("Failed to create child procces");
+		data->msg1 = ft_strdup("Failed to create child procces");
 		exit_program(data, EXIT_FAILURE, 1);
 	}
 	if (pid == 0)
 	{
-		if (!is_last_command)
+		if (!last)
 			setup_first_command(data);
 		else
 			setup_last_command(data);
 		close_all_fds(data);
-		execve(data->cmd_path, data->cmd_array, data->envp);
+		execve(data->cmd_paths[last],data->cmd_arrays[last], data->envp);
 		exit_program(data, map_errno_to_exit_code(data), 1);
 	}
 	return (pid);

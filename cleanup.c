@@ -6,7 +6,7 @@
 /*   By: vpoka <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/07 22:09:03 by vpoka             #+#    #+#             */
-/*   Updated: 2025/02/21 14:18:08 by vpoka            ###   ########.fr       */
+/*   Updated: 2025/02/21 15:50:18 by vpoka            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,8 +39,8 @@ static void	protected_close(t_pipex *data, int *fd)
 {
 	if (*fd > 2 && close(*fd) == -1)
 	{
-		data->error_msg = ft_strdup("Failed to close file descriptor");
-		data->error_file = ft_itoa(*fd);
+		data->msg1 = ft_strdup("Failed to close file descriptor");
+		data->msg2 = ft_itoa(*fd);
 		exit_program(data, EXIT_FAILURE, 1);
 	}
 	else if (*fd > 2)
@@ -79,12 +79,12 @@ void	wait_for_child_processes(t_pipex *data)
 
 	if (data->child[0] >= 0 && waitpid(data->child[0], NULL, 0) == -1)
 	{
-		data->error_msg = ft_strdup("Waitpid failed for 1st command");
+		data->msg1 = ft_strdup("Waitpid failed for 1st command");
 		exit_program(data, EXIT_FAILURE, 1);
 	}
 	if (data->child[1] >= 0 && waitpid(data->child[1], &status, 0) == -1)
 	{
-		data->error_msg = ft_strdup("Waitpid failed for 2nd command");
+		data->msg1 = ft_strdup("Waitpid failed for 2nd command");
 		exit_program(data, EXIT_FAILURE, 1);
 	}
 	if (data->child[1] != -1 && WIFEXITED(status))

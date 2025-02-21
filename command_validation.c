@@ -6,7 +6,7 @@
 /*   By: vpoka <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/31 17:36:38 by vpoka             #+#    #+#             */
-/*   Updated: 2025/02/21 12:18:09 by vpoka            ###   ########.fr       */
+/*   Updated: 2025/02/21 16:05:22 by vpoka            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,49 +76,47 @@ static char	*find_executable_path(char **paths, char **cmd_array)
 	return (NULL);
 }
 
-/**
- * Resolves full path to command executable
- * Checks if command contains path, otherwise searches PATH directories
- * @param cmd_array - command array containing command name
- * @param envp - array of environment variables
- * @return full path to executable if found, NULL otherwise
- */
-static char	*resolve_command_path(char **cmd_array, char **envp)
+static char	*resolve_command_path(t_pipex *data, int last)
 {
 	char	**path_dirs;
 	char	*result;
 
-	if (ft_strchr(cmd_array[0], '/') && access(cmd_array[0], F_OK) == 0)
-		return (ft_strdup(cmd_array[0]));
-	path_dirs = extract_path_directories(envp);
-	if (!path_dirs)
+	if (ft_strchr(data->cmd_arrays[last][0], '/'))
+	{
+		if (access(data->cmd_arrays[last][0], F_OK) == 0)
+			return (ft_strdup(data->cmd_arrays[last][0]));
 		return (NULL);
-	result = find_executable_path(path_dirs, cmd_array);
-	free_string_array(path_dirs);
-	return (result);
+	}
+	else
+	{
+		path_dirs = extract_path_directories(data->envp);
+		if (!path_dirs)
+			return (NULL);
+		result = find_executable_path(path_dirs, data->cmd_arrays[last]);
+		free_string_array(path_dirs);
+		return (result);
+	}
 }
 
-/**
- * Processes command by splitting it and resolving executable path
- * @param data - pipex structure containing command data
- * @param cmd - command string to process
- * @param envp - array of environment variables
- */
-void	process_command(t_pipex *data, char *cmd, int is_last_command)
+void	process_command(t_pipex *data, int last)
 {
 	if (!data->envp)
 	{
-		data->error_msg = ft_strdup("Missing enviroment variable");
+		data->msg1 = ft_strdup("Missing enviroment variable");
 		exit_program(data, EXIT_FAILURE, 0);
 	}
-	if (data->cmd_array)
-		free_string_array(data->cmd_array);
-	data->cmd_array = ft_split(cmd, ' ');
-	if (data->cmd_path)
-		free(data->cmd_path);
-	if (!data->cmd_array[0])
-		return ;
-	data->cmd_path = resolve_command_path(data->cmd_array, data->envp);
-	if (!data->cmd_path)
-		data->cmd_path = ft_strdup(data->cmd_array[0]);
+	data->cmd_arrays[last] = ft_split(data->argv[2 + last], ' ');
+	if (data->cmd_arrays[last])
+		data->cmd_paths[last] = resolve_command_path(data, last);
+	if (!data->cmd_arrays[last] || !data->cmd_paths[last])
+	{
+		if (!data->cmd_arrays[last])
+			data->msg1 = ft_strdup(" ");
+		else
+			data->msg1 = ft_strdup(data->cmd_paths[last]);
+		data->msg2 = ft_strdup("command not found");
+		if (last)
+			exit_program(data, 127, 0);
+		print_error(data, 0);
+	}
 }

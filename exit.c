@@ -6,7 +6,7 @@
 /*   By: vpoka <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/18 22:18:29 by vpoka             #+#    #+#             */
-/*   Updated: 2025/02/20 19:18:27 by vpoka            ###   ########.fr       */
+/*   Updated: 2025/02/21 15:50:57 by vpoka            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,25 +24,25 @@
  */
 void	print_error(t_pipex *data, int include_errno)
 {
-	if (data->error_msg)
+	if (data->msg1)
 	{
-		ft_putstr_fd(data->error_msg, STDERR_FILENO);
-		if (data->error_file || include_errno)
+		ft_putstr_fd(data->msg1, STDERR_FILENO);
+		if (data->msg1 || include_errno)
 			ft_putstr_fd(": ", STDERR_FILENO);
 		else
 			ft_putchar_fd('\n', STDERR_FILENO);
-		free(data->error_msg);
-		data->error_msg = NULL;
+		free(data->msg1);
+		data->msg1 = NULL;
 	}
-	if (data->error_file)
+	if (data->msg2)
 	{
-		ft_putstr_fd(data->error_file, STDERR_FILENO);
+		ft_putstr_fd(data->msg2, STDERR_FILENO);
 		if (include_errno)
 			ft_putstr_fd(": ", STDERR_FILENO);
 		else
 			ft_putchar_fd('\n', STDERR_FILENO);
-		free(data->error_file);
-		data->error_file = NULL;
+		free(data->msg2);
+		data->msg2 = NULL;
 	}
 	if (include_errno)
 		ft_putendl_fd(strerror(errno), STDERR_FILENO);
@@ -61,13 +61,13 @@ void	print_error(t_pipex *data, int include_errno)
 void	exit_program(t_pipex *data, int exit_code, int include_errno)
 {
 	print_error(data, include_errno);
-	if (data->cmd_array)
-		free_string_array(data->cmd_array);
-	if (data->cmd_path)
+	if (data->cmd_arrays)
 	{
-		free(data->cmd_path);
-		data->cmd_path = NULL;
+		free_string_array(data->cmd_arrays[0]);
+		free_string_array(data->cmd_arrays[1]);
 	}
+	if (data->cmd_paths)
+		free_string_array(data->cmd_paths);
 	if (data->input > 2)
 		close(data->input);
 	if (data->output > 2)
