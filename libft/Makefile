@@ -69,15 +69,15 @@ BONUS_OBJS := $(BONUS_SRCS:%.c=%.o)
 #name of the created file for check if any function needs recompilation.
 BONUS = libft_bonus
 
-PRINTF_SRCS =  ft_printf.c \
-		ft_printf_args.c \
-		ft_printf_char.c \
-		ft_printf_int.c \
-		ft_printf_str.c \
-		ft_printf_uint.c \
-		ft_printf_ptr.c \
-		ft_printf_hex.c \
-		ft_printf_percent.c
+PRINTF_SRCS =	ft_printf.c \
+				ft_printf_args.c \
+				ft_printf_char.c \
+				ft_printf_int.c \
+				ft_printf_str.c \
+				ft_printf_uint.c \
+				ft_printf_ptr.c \
+				ft_printf_hex.c \
+				ft_printf_percent.c
 
 PRINTF_OBJS = $(PRINTF_SRCS:.c=.o)
 
