@@ -6,7 +6,7 @@
 /*   By: vpoka <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/05 14:22:59 by vpoka             #+#    #+#             */
-/*   Updated: 2025/02/21 16:37:08 by vpoka            ###   ########.fr       */
+/*   Updated: 2025/02/21 17:07:15 by vpoka            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,7 +58,7 @@ pid_t	execute_command(t_pipex *data, int last)
 	pid = fork();
 	if (pid == -1)
 	{
-		data->msg1 = ft_strdup("Failed to create child procces");
+		data->msg1 = ft_strdup("failed to create child procces");
 		exit_program(data, EXIT_FAILURE, 1);
 	}
 	if (pid == 0)

@@ -6,7 +6,7 @@
 /*   By: vpoka <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/31 17:36:38 by vpoka             #+#    #+#             */
-/*   Updated: 2025/02/21 16:36:02 by vpoka            ###   ########.fr       */
+/*   Updated: 2025/02/21 17:07:08 by vpoka            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -102,15 +102,15 @@ void	process_command(t_pipex *data, int last)
 {
 	if (!data->envp)
 	{
-		data->msg1 = ft_strdup("Missing enviroment variable");
+		data->msg1 = ft_strdup("missing enviroment variable");
 		exit_program(data, EXIT_FAILURE, 0);
 	}
 	data->cmd_arrays[last] = ft_split(data->argv[2 + last], ' ');
-	if (data->cmd_arrays[last])
+	if (data->cmd_arrays[last] && data->cmd_arrays[last][0])
 		data->cmd_paths[last] = resolve_command_path(data, last);
 	if (!data->cmd_arrays[last] || !data->cmd_paths[last])
 	{
-		if (!data->cmd_arrays[last])
+		if (!data->cmd_arrays[last] || !data->cmd_arrays[last][0])
 			data->msg1 = ft_strdup(" ");
 		else
 			data->msg1 = ft_strdup(data->cmd_arrays[last][0]);
