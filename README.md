@@ -144,7 +144,7 @@ The program uses the following system configurations:
 
 ## Project Status
 
-This project appears to be actively maintained based on recent commits in February 2025. The latest updates focus on improving error handling, code documentation, and memory management. The project is suitable for educational purposes and demonstrates a functional implementation of Unix pipe mechanics.
+Completed (100/100 pts)
 
 ## License
 
