@@ -2,8 +2,10 @@
 
 ## Table of Contents
 - [Overview](#overview)
-- [Features](#Features)
+- [Features](#features)
 - [Getting Started](#getting-started)
+  - [Prerequisites](#prerequisites)
+  - [Installation](#installation)
 - [Usage](#usage)
 - [Configuration](#configuration)
 - [Troubleshooting](#troubleshooting)
