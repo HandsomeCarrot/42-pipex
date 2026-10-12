@@ -1,151 +1,165 @@
+*This project has been created as part of the 42 curriculum by vpoka.*
+
 # pipex
 
+Recreating the shell pipeline `< file1 cmd1 | cmd2 > file2` in C.
+
 ## Table of Contents
-- [Overview](#overview)
-- [Features](#features)
-- [Getting Started](#getting-started)
+- [Description](#description)
+- [Instructions](#instructions)
   - [Prerequisites](#prerequisites)
-  - [Installation](#installation)
-- [Usage](#usage)
+  - [Building](#building)
+  - [Usage](#usage)
+  - [Parameters](#parameters)
+  - [Examples](#examples)
+- [Resources](#resources)
+  - [AI usage](#ai-usage)
 - [Configuration](#configuration)
 - [Troubleshooting](#troubleshooting)
-- [Project Status](#project-status)
-- [License](#license)
+- [Status](#status)
 
-## Overview
+## Description
 
-pipex is a command-line utility that mimics the behavior of shell pipes in Unix-like systems. The program replicates the functionality of the bash pipe operator (`|`) by executing two commands in sequence, where the output of the first command becomes the input to the second command. This project is part of the 42 school curriculum and serves as a practical exercise in process management, file descriptors, and inter-process communication using pipes.
+pipex is a command-line program that reproduces exactly what the shell does for a two-command pipeline. You give it an input file, two shell commands and an output file, and it runs the first command on the input, pipes its output into the second command, and writes the result to the output file — the same as `< file1 cmd1 | cmd2 > file2`.
 
-The program demonstrates low-level Unix system programming concepts, including `fork()`, `pipe()`, `dup2()`, and `execve()`, providing hands-on experience with how shell pipelines work under the hood.
+It is a 42 school project meant to let you discover in detail a UNIX mechanism you already use every day. Under the hood it works with the raw building blocks of a shell pipeline: `fork()`, `pipe()`, `dup2()`, `execve()` and `waitpid()`, with careful handling of file descriptors, paths and error cases.
 
-## Features
+Features:
 
 - Executes two commands connected by a pipe, mimicking shell behavior
-- Reads input from a specified file and writes output to another file
-- Validates command existence by searching through PATH environment variable
-- Supports both absolute and relative command paths
-- Provides detailed error messages for file access issues and command failures
-- Handles proper cleanup of file descriptors and child processes
-- Returns appropriate exit codes following Unix conventions (127 for command not found, 126 for execution failure)
+- Reads input from a given file and writes output to another file (created or truncated)
+- Resolves commands through the `PATH` environment variable, and also accepts absolute or relative command paths
+- Reports errors like the shell does, with exit codes following Unix conventions (127 for command not found, 126 for execution failure)
+- Cleans up file descriptors and child processes properly
+- Builds on the project's own `libft` library (authorized by the subject)
 
-## Getting Started
+The mandatory part (exactly two commands) is implemented; the bonus features (multiple pipes, `here_doc`) are not included.
+
+## Instructions
 
 ### Prerequisites
 
-- GCC or compatible C compiler
-- Make build system
-- Unix-like operating system (Linux, macOS, or BSD)
-- Standard C library with POSIX support
+- A C compiler (`cc`, as used by the Makefile)
+- GNU Make
+- A POSIX system (Linux, macOS or BSD)
+- No external libraries: `libft` is bundled in the repository
 
-### Installation
+### Building
 
-1. Clone the repository:
-```bash
-git clone https://github.com/HandsomeCarrot/42-pipex.git
-cd 42-pipex
-```
-
-2. Build the project:
 ```bash
 make
 ```
 
-This compiles the pipex executable along with the required libft library. The Makefile supports the following targets:
-- `make` or `make all`: Build the pipex executable
-- `make clean`: Remove object files
-- `make fclean`: Remove object files and executable
-- `make re`: Rebuild the entire project from scratch
+This compiles `libft` with its own Makefile first, then links the `pipex` executable. The sources are compiled with `-Wall -Wextra -Werror` and the Makefile does not relink.
 
-## Usage
+Available targets:
 
-The pipex program requires exactly four arguments and follows this syntax:
+- `make` or `make all`: build the `pipex` executable
+- `make clean`: remove object files (project and libft)
+- `make fclean`: remove object files and the executable
+- `make re`: rebuild everything from scratch
+
+### Usage
 
 ```bash
 ./pipex file1 cmd1 cmd2 file2
 ```
 
-This is equivalent to the shell command:
+This behaves exactly like the shell command:
+
 ```bash
 < file1 cmd1 | cmd2 > file2
 ```
 
+The program requires exactly four arguments; otherwise it prints `exactly 4 arguments needed` and exits.
+
 ### Parameters
 
-- `file1`: Input file to read from
-- `cmd1`: First command to execute (receives input from file1)
-- `cmd2`: Second command to execute (receives input from cmd1's output)
-- `file2`: Output file to write to (created with permissions 0644)
+- `file1`: input file to read from
+- `cmd1`: first shell command (with its parameters); its stdin comes from `file1`
+- `cmd2`: second shell command (with its parameters); its stdin comes from `cmd1`'s stdout
+- `file2`: output file to write to (created with permissions `0644`, truncated if it already exists)
+
+Commands with spaces or special characters must be quoted, as in the shell.
 
 ### Examples
 
-1. Count lines in a file after filtering:
+From the subject:
+
+```bash
+./pipex infile "ls -l" "wc -l" outfile
+```
+
+Behaves like: `< infile ls -l | wc -l > outfile`
+
+```bash
+./pipex infile "grep a1" "wc -w" outfile
+```
+
+Behaves like: `< infile grep a1 | wc -w > outfile`
+
+A few more:
+
 ```bash
 ./pipex input.txt "grep hello" "wc -l" output.txt
-```
-Equivalent to: `< input.txt grep hello | wc -l > output.txt`
-
-2. Process text data:
-```bash
 ./pipex data.txt "cat" "tr 'a-z' 'A-Z'" uppercase.txt
-```
-Equivalent to: `< data.txt cat | tr 'a-z' 'A-Z' > uppercase.txt`
-
-3. Using absolute paths:
-```bash
 ./pipex input.txt "/bin/ls -l" "/usr/bin/head -n 5" output.txt
 ```
 
+## Resources
+
+- man pages: [pipe(2)](https://man7.org/linux/man-pages/man2/pipe.2.html), [fork(2)](https://man7.org/linux/man-pages/man2/fork.2.html), [execve(2)](https://man7.org/linux/man-pages/man2/execve.2.html), [dup2(2)](https://man7.org/linux/man-pages/man2/dup2.2.html), [waitpid(2)](https://man7.org/linux/man-pages/man2/waitpid.2.html)
+- [GNU Bash manual — Pipelines](https://www.gnu.org/software/bash/manual/bash.html#Pipelines)
+- 42 Pipex subject (version 3)
+
+### AI usage
+
+AI assistance was used for documentation: writing and updating this README, and for commit messages.
+
 ## Configuration
 
-The program uses the following system configurations:
+### Environment variables
 
-### Environment Variables
+- `PATH`: used to locate executable commands; each directory in `PATH` is searched to find `cmd1` and `cmd2`.
 
-- `PATH`: Used to locate executable commands. The program searches each directory in PATH to find the specified commands.
+### File permissions
 
-### File Permissions
+- Output files are created with permissions `0644` (owner read/write, group/others read-only) and truncated if they already exist.
 
-- Output files are created with permissions `0644` (owner read/write, group/others read-only).
+### Exit codes
 
-### Exit Codes
-
-- `0`: Successful execution
-- `1`: General errors (file access issues, missing arguments)
-- `126`: Command execution failed
-- `127`: Command not found
+- `0`: successful execution
+- `1`: general errors (bad arguments, file access issues)
+- `126`: command found but execution failed
+- `127`: command not found
 
 ## Troubleshooting
 
-### Common Issues
-
-**Issue: "command not found" error**
-- Verify the command exists in your PATH: `which <command>`
+**"command not found" error**
+- Verify the command exists in your `PATH`: `which <command>`
 - Try using the absolute path to the command
 - Ensure the command name is spelled correctly
 
-**Issue: Input/output file errors**
+**Input/output file errors**
 - Check file permissions: `ls -l <filename>`
 - Verify the input file exists and is readable
 - Ensure you have write permissions in the directory for the output file
 
-**Issue: "exactly 4 arguments needed" error**
+**"exactly 4 arguments needed" error**
 - Verify you are passing exactly four arguments to pipex
 - Use quotes around commands with spaces or special characters: `./pipex in.txt "grep -i test" "wc -l" out.txt`
 
-**Issue: Compilation errors**
-- Ensure you have a compatible C compiler installed
+**Compilation errors**
+- Ensure `cc` and `make` are installed
 - Check that all source files are present in the repository
 - Try running `make fclean && make` to rebuild from scratch
 
-**Issue: Program hangs or doesn't complete**
+**Program hangs or doesn't complete**
 - Check that both commands are valid and can execute independently
 - Verify the input file is not empty if commands expect input
 - Ensure commands don't require interactive input
 
-## Project Status
+## Status
 
-Completed (100/100 pts)
+Completed — evaluated at 100/100 points.
 
-## License
-
-No license.
